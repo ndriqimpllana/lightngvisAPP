@@ -57,32 +57,88 @@
   width: 100%;
 }
 
-/* ── Language switcher ── */
-.navbar__lang {
+/* ── Right section ── */
+.navbar__right {
   display: flex;
-  gap: 0.25rem;
   align-items: center;
-  padding-left: 1.25rem;
-  border-left: 1px solid var(--gray-200);
+  gap: 2rem;
 }
 
-.lang-btn {
+/* ── Language dropdown ── */
+.lang-dropdown {
+  position: relative;
+}
+
+.lang-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   background: none;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  color: var(--gray-400);
-  padding: 0.25rem 0.35rem;
-  transition: color var(--transition);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--black);
+  padding: 0.35rem 0;
   font-family: inherit;
 }
 
-.lang-btn:hover {
+.lang-dropdown__arrow {
+  transition: transform var(--transition);
+}
+
+.lang-dropdown__arrow--open {
+  transform: rotate(180deg);
+}
+
+.lang-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background-color: var(--white);
+  border: 1px solid var(--gray-200);
+  min-width: 140px;
+  padding: 0.35rem 0;
+  list-style: none;
+  animation: dropIn 0.15s ease;
+}
+
+.lang-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: none;
+  font-size: 0.75rem;
+  color: var(--gray-600);
+  font-family: inherit;
+  text-align: left;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.lang-dropdown__item:hover {
+  background-color: var(--gray-100);
   color: var(--black);
 }
 
-.lang-btn--active {
+.lang-dropdown__item--active {
   color: var(--black);
-  font-weight: 700;
+  font-weight: 600;
+}
+
+.lang-dropdown__short {
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  min-width: 1.5rem;
+}
+
+.lang-dropdown__label {
+  font-weight: 400;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Hamburger ── */
@@ -134,6 +190,7 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--transition);
+    z-index: 90;
   }
 
   .navbar__links--open {
@@ -143,5 +200,9 @@
 
   .navbar__links a {
     font-size: 1rem;
+  }
+
+  .lang-dropdown {
+    z-index: 101;
   }
 }

@@ -24,14 +24,19 @@
   background-size: cover;
   background-position: center;
   opacity: 0;
+  transform: scale(1);
   transition: opacity 1.2s ease-in-out;
-  transform: scale(1.03);
+  will-change: opacity, transform;
 }
 
 .hero__slide--active {
   opacity: 1;
-  transform: scale(1);
-  transition: opacity 1.2s ease-in-out, transform 6s ease-out;
+  animation: kenBurns 4.5s ease-out forwards;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1.1); }
+  to   { transform: scale(1); }
 }
 
 /* ── Overlay for text readability ── */
