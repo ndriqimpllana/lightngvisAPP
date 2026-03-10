@@ -4,7 +4,7 @@ function Hero() {
   return (
     <section id="hero" className="hero">
       <div className="hero__content">
-        <p className="hero__tagline">Photography by</p>
+        <p className="hero__tagline">Photography by Ndriçim Pllana</p>
         <h1 className="hero__title">LIGHTNGVIS</h1>
         <p className="hero__subtitle">Capturing moments in light and shadow</p>
         <a href="#work" className="btn hero__cta">View Work</a>

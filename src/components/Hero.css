@@ -17,10 +17,11 @@
 }
 
 .hero__tagline {
-  font-size: 0.75rem;
-  letter-spacing: 0.25em;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gray-400);
+  font-weight: 400;
 }
 
 .hero__title {
@@ -30,10 +31,10 @@
 }
 
 .hero__subtitle {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--gray-600);
   font-weight: 300;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   text-transform: none;
 }
 
@@ -52,7 +53,7 @@
 }
 
 .hero__scroll span {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gray-400);

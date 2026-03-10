@@ -21,7 +21,7 @@ function About() {
           <div className="about__details">
             <div>
               <span className="about__label">Based in</span>
-              <span className="about__value">Your City</span>
+              <span className="about__value">New York City</span>
             </div>
             <div>
               <span className="about__label">Available for</span>
