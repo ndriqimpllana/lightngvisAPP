@@ -17,19 +17,19 @@ import img12 from '../assets/img/1O4A4132.jpg'
 import img13 from '../assets/img/1O4A3840.jpg'
 
 const photos = [
-  { id: 1, src: img1, title: 'Untitled I', category: 'Portrait' },
+  { id: 1, src: img1, title: 'Untitled I', category: 'Street' },
   { id: 2, src: img2, title: 'Untitled II', category: 'Street' },
-  { id: 3, src: img3, title: 'Untitled III', category: 'Landscape' },
-  { id: 4, src: img4, title: 'Untitled IV', category: 'Portrait' },
-  { id: 5, src: img5, title: 'Untitled V', category: 'Architecture' },
+  { id: 3, src: img3, title: 'Untitled III', category: 'Street' },
+  { id: 4, src: img4, title: 'Untitled IV', category: 'Street' },
+  { id: 5, src: img5, title: 'Untitled V', category: 'Street' },
   { id: 6, src: img6, title: 'Untitled VI', category: 'Street' },
-  { id: 7, src: img7, title: 'Untitled VII', category: 'Landscape' },
-  { id: 8, src: img8, title: 'Untitled VIII', category: 'Portrait' },
-  { id: 9, src: img9, title: 'Untitled IX', category: 'Architecture' },
-  { id: 10, src: img10, title: 'Untitled X', category: 'Portrait' },
+  { id: 7, src: img7, title: 'Untitled VII', category: 'Street' },
+  { id: 8, src: img8, title: 'Untitled VIII', category: 'Street' },
+  { id: 9, src: img9, title: 'Untitled IX', category: 'Street' },
+  { id: 10, src: img10, title: 'Untitled X', category: 'Street' },
   { id: 11, src: img11, title: 'Untitled XI', category: 'Street' },
-  { id: 12, src: img12, title: 'Untitled XII', category: 'Landscape' },
-  { id: 13, src: img13, title: 'Untitled XIII', category: 'Portrait' },
+  { id: 12, src: img12, title: 'Untitled XII', category: 'Street' },
+  { id: 13, src: img13, title: 'Untitled XIII', category: 'Street' },
 ]
 
 function Gallery() {
