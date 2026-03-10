@@ -2,16 +2,34 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './Gallery.css'
 
-const placeholders = [
-  { id: 1, title: 'Untitled I', category: 'Portrait', aspect: 'tall' },
-  { id: 2, title: 'Untitled II', category: 'Street', aspect: 'wide' },
-  { id: 3, title: 'Untitled III', category: 'Landscape', aspect: 'square' },
-  { id: 4, title: 'Untitled IV', category: 'Portrait', aspect: 'tall' },
-  { id: 5, title: 'Untitled V', category: 'Architecture', aspect: 'wide' },
-  { id: 6, title: 'Untitled VI', category: 'Street', aspect: 'square' },
-  { id: 7, title: 'Untitled VII', category: 'Landscape', aspect: 'tall' },
-  { id: 8, title: 'Untitled VIII', category: 'Portrait', aspect: 'wide' },
-  { id: 9, title: 'Untitled IX', category: 'Architecture', aspect: 'square' },
+import img1 from '../assets/img/ANDY4354.jpg'
+import img2 from '../assets/img/ANDY1168.jpg'
+import img3 from '../assets/img/ANDY4279.jpg'
+import img4 from '../assets/img/ANDY2067.jpg'
+import img5 from '../assets/img/6W0A2737.jpg'
+import img6 from '../assets/img/ANDY1105.jpg'
+import img7 from '../assets/img/6W0A6103.jpg'
+import img8 from '../assets/img/1O4A7889.jpg'
+import img9 from '../assets/img/1O4A8100.jpg'
+import img10 from '../assets/img/ANDY8813-2.jpg'
+import img11 from '../assets/img/1O4A5122.jpg'
+import img12 from '../assets/img/1O4A4132.jpg'
+import img13 from '../assets/img/1O4A3840.jpg'
+
+const photos = [
+  { id: 1, src: img1, title: 'Untitled I', category: 'Portrait' },
+  { id: 2, src: img2, title: 'Untitled II', category: 'Street' },
+  { id: 3, src: img3, title: 'Untitled III', category: 'Landscape' },
+  { id: 4, src: img4, title: 'Untitled IV', category: 'Portrait' },
+  { id: 5, src: img5, title: 'Untitled V', category: 'Architecture' },
+  { id: 6, src: img6, title: 'Untitled VI', category: 'Street' },
+  { id: 7, src: img7, title: 'Untitled VII', category: 'Landscape' },
+  { id: 8, src: img8, title: 'Untitled VIII', category: 'Portrait' },
+  { id: 9, src: img9, title: 'Untitled IX', category: 'Architecture' },
+  { id: 10, src: img10, title: 'Untitled X', category: 'Portrait' },
+  { id: 11, src: img11, title: 'Untitled XI', category: 'Street' },
+  { id: 12, src: img12, title: 'Untitled XII', category: 'Landscape' },
+  { id: 13, src: img13, title: 'Untitled XIII', category: 'Portrait' },
 ]
 
 function Gallery() {
@@ -26,13 +44,18 @@ function Gallery() {
       </div>
 
       <div className="gallery__grid">
-        {placeholders.map((item) => (
+        {photos.map((item) => (
           <div
             key={item.id}
-            className={`gallery__item gallery__item--${item.aspect}`}
+            className="gallery__item"
             onClick={() => setLightbox(item)}
           >
-            <div className="gallery__placeholder" />
+            <img
+              className="gallery__img"
+              src={item.src}
+              alt={item.title}
+              loading="lazy"
+            />
             <div className="gallery__overlay">
               <h3>{item.title}</h3>
               <span>{item.category}</span>
@@ -48,7 +71,11 @@ function Gallery() {
             &times;
           </button>
           <div className="lightbox__content" onClick={(e) => e.stopPropagation()}>
-            <div className="lightbox__placeholder" />
+            <img
+              className="lightbox__img"
+              src={lightbox.src}
+              alt={lightbox.title}
+            />
             <div className="lightbox__info">
               <h3>{lightbox.title}</h3>
               <span>{lightbox.category}</span>
