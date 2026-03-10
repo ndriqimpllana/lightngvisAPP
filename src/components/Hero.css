@@ -7,9 +7,45 @@
   text-align: center;
   position: relative;
   padding: 2rem;
+  overflow: hidden;
 }
 
+/* ── Slideshow ── */
+.hero__slideshow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  background-color: var(--gray-200);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  transform: scale(1.03);
+}
+
+.hero__slide--active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 1.2s ease-in-out, transform 6s ease-out;
+}
+
+/* ── Overlay for text readability ── */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Content ── */
 .hero__content {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +56,7 @@
   font-size: 1rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gray-400);
+  color: var(--gray-600);
   font-weight: 500;
 }
 
@@ -28,6 +64,7 @@
   font-weight: 300;
   line-height: 1;
   letter-spacing: 0.12em;
+  color: var(--black);
 }
 
 .hero__subtitle {
@@ -46,6 +83,7 @@
 .hero__scroll {
   position: absolute;
   bottom: 2.5rem;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,14 +94,14 @@
   font-size: 0.8rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gray-400);
+  color: var(--gray-600);
   font-weight: 500;
 }
 
 .hero__scroll-line {
   width: 1px;
   height: 40px;
-  background-color: var(--gray-400);
+  background-color: var(--gray-600);
   animation: scrollPulse 2s ease-in-out infinite;
 }
 
