@@ -15,7 +15,7 @@
   --gray-400: #a3a3a3;
   --gray-600: #525252;
   --gray-800: #262626;
-  --font-sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   --transition: 0.3s ease;
 }
 
@@ -94,9 +94,10 @@ p {
   padding: 0.875rem 2.5rem;
   background-color: var(--black);
   color: var(--white);
-  font-size: 0.85rem;
-  letter-spacing: 0.12em;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-weight: 500;
   border: none;
   cursor: pointer;
   font-family: inherit;
