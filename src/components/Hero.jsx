@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react'
 import './Hero.css'
 
-/*
-  Replace these placeholder paths with your actual images.
-  Drop your photos into src/assets/hero/ and update the imports.
-*/
+import img1 from '../assets/img/ANDY4354.jpg'
+import img2 from '../assets/img/ANDY1168.jpg'
+import img3 from '../assets/img/ANDY4279.jpg'
+import img4 from '../assets/img/ANDY2067.jpg'
+import img5 from '../assets/img/6W0A2737.jpg'
+import img6 from '../assets/img/ANDY1105.jpg'
+import img7 from '../assets/img/6W0A6103.jpg'
+import img8 from '../assets/img/1O4A7889.jpg'
+import img9 from '../assets/img/1O4A8100.jpg'
+import img10 from '../assets/img/ANDY8813-2.jpg'
+import img11 from '../assets/img/1O4A5122.jpg'
+import img12 from '../assets/img/1O4A4132.jpg'
+import img13 from '../assets/img/1O4A3840.jpg'
+
 const heroImages = [
-  null, // placeholder 1
-  null, // placeholder 2
-  null, // placeholder 3
-  null, // placeholder 4
-  null, // placeholder 5
-  null, // placeholder 6
-  null, // placeholder 7
-  null, // placeholder 8
-  null, // placeholder 9
-  null, // placeholder 10
+  img1, img2, img3, img4, img5, img6, img7,
+  img8, img9, img10, img11, img12, img13,
 ]
 
 function Hero() {
