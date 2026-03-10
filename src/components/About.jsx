@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import './About.css'
 
 function About() {
+  const { t } = useTranslation()
+
   return (
     <section id="about" className="about section">
       <div className="about__inner">
@@ -8,24 +11,17 @@ function About() {
           <div className="about__placeholder" />
         </div>
         <div className="about__text">
-          <h2>About</h2>
-          <p>
-            I'm a photographer driven by a fascination with light, shadow,
-            and the quiet moments in between. My work explores the beauty
-            of everyday life through a minimalist lens.
-          </p>
-          <p>
-            Whether capturing portraits, street scenes, or landscapes,
-            I aim to create images that feel both timeless and intimate.
-          </p>
+          <h2>{t('about.heading')}</h2>
+          <p>{t('about.bio1')}</p>
+          <p>{t('about.bio2')}</p>
           <div className="about__details">
             <div>
-              <span className="about__label">Based in</span>
-              <span className="about__value">New York City</span>
+              <span className="about__label">{t('about.basedIn')}</span>
+              <span className="about__value">{t('about.basedInValue')}</span>
             </div>
             <div>
-              <span className="about__label">Available for</span>
-              <span className="about__value">Freelance & Commissions</span>
+              <span className="about__label">{t('about.availableFor')}</span>
+              <span className="about__value">{t('about.availableForValue')}</span>
             </div>
           </div>
         </div>

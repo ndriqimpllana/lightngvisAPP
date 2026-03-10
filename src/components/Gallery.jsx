@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './Gallery.css'
 
 const placeholders = [
@@ -14,13 +15,14 @@ const placeholders = [
 ]
 
 function Gallery() {
+  const { t } = useTranslation()
   const [lightbox, setLightbox] = useState(null)
 
   return (
     <section id="work" className="gallery section">
       <div className="section-header">
-        <h2>Selected Work</h2>
-        <p>A curated collection of moments frozen in time</p>
+        <h2>{t('gallery.heading')}</h2>
+        <p>{t('gallery.subheading')}</p>
       </div>
 
       <div className="gallery__grid">

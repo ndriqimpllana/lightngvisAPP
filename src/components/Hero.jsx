@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import './Hero.css'
 
 import img1 from '../assets/img/ANDY4354.jpg'
@@ -21,6 +22,7 @@ const heroImages = [
 ]
 
 function Hero() {
+  const { t } = useTranslation()
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
@@ -47,13 +49,13 @@ function Hero() {
       <div className="hero__overlay" />
 
       <div className="hero__content">
-        <p className="hero__tagline">Photography by</p>
+        <p className="hero__tagline">{t('hero.tagline')}</p>
         <h1 className="hero__title">NDRIÇIM PLLANA</h1>
-        <p className="hero__subtitle">Capturing moments in light and shadow</p>
-        <a href="#work" className="btn hero__cta">View Work</a>
+        <p className="hero__subtitle">{t('hero.subtitle')}</p>
+        <a href="#work" className="btn hero__cta">{t('hero.cta')}</a>
       </div>
       <div className="hero__scroll">
-        <span>Scroll</span>
+        <span>{t('hero.scroll')}</span>
         <div className="hero__scroll-line" />
       </div>
     </section>

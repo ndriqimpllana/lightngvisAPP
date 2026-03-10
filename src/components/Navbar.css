@@ -57,6 +57,34 @@
   width: 100%;
 }
 
+/* ── Language switcher ── */
+.navbar__lang {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--gray-200);
+}
+
+.lang-btn {
+  background: none;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--gray-400);
+  padding: 0.25rem 0.35rem;
+  transition: color var(--transition);
+  font-family: inherit;
+}
+
+.lang-btn:hover {
+  color: var(--black);
+}
+
+.lang-btn--active {
+  color: var(--black);
+  font-weight: 700;
+}
+
 /* ── Hamburger ── */
 .navbar__toggle {
   display: none;
