@@ -96,7 +96,6 @@ const FRAMES = [
     label: 'No Frame',
     priceAdd: 0,
     thick: 0,
-    swatch: 'transparent',
     swatchDashed: true,
   },
   {
@@ -124,8 +123,8 @@ const FRAMES = [
     priceAdd: 55,
     thick: 10,
     swatch: '#b8bcc4',
-    bg: 'linear-gradient(145deg, #d4d8e0 0%, #8890a0 30%, #c8ccd4 60%, #9098a8 100%)',
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.45)',
+    bg: 'linear-gradient(145deg, #eceef4 0%, #8890a8 12%, #d8dce8 24%, #6878a0 36%, #c8ccd8 50%, #8090b0 62%, #d0d4e0 76%, #9098b8 88%, #e0e4ee 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.7)',
   },
   {
     id: 'thin-gold',
@@ -133,8 +132,8 @@ const FRAMES = [
     priceAdd: 75,
     thick: 10,
     swatch: '#c9a84c',
-    bg: 'linear-gradient(145deg, #e2c060 0%, #a07830 30%, #d4b050 60%, #907020 100%)',
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.3)',
+    bg: 'linear-gradient(145deg, #f8e070 0%, #a87820 16%, #f0d050 32%, #906810 48%, #e8c840 64%, #b08828 80%, #f4d860 96%, #a07020 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.45)',
   },
   {
     id: 'natural-wood',
@@ -142,8 +141,11 @@ const FRAMES = [
     priceAdd: 65,
     thick: 22,
     swatch: '#b8875a',
-    bg: 'linear-gradient(135deg, #cc9a6e 0%, #a06838 20%, #d8a87c 42%, #986030 64%, #c09060 82%, #a07040 100%)',
-    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.14)',
+    bg: [
+      'repeating-linear-gradient(91deg, transparent 0px, transparent 4px, rgba(0,0,0,0.04) 4px, rgba(0,0,0,0.04) 5px, transparent 5px, transparent 11px, rgba(255,255,255,0.06) 11px, rgba(255,255,255,0.06) 12px)',
+      'linear-gradient(140deg, #d4a87a 0%, #a06838 18%, #e0b48a 36%, #986030 54%, #cc9a70 72%, #a27040 90%, #b88860 100%)',
+    ].join(', '),
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.18)',
   },
   {
     id: 'dark-walnut',
@@ -151,7 +153,10 @@ const FRAMES = [
     priceAdd: 75,
     thick: 24,
     swatch: '#3d2b1f',
-    bg: 'linear-gradient(135deg, #4e3528 0%, #2a1810 28%, #5a3e2a 54%, #241408 78%, #3e2818 100%)',
+    bg: [
+      'repeating-linear-gradient(90deg, transparent 0px, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px, transparent 6px, transparent 14px)',
+      'linear-gradient(140deg, #4e3528 0%, #2a1810 28%, #5a3e2a 54%, #241408 78%, #3e2818 100%)',
+    ].join(', '),
     inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.06)',
   },
   {
@@ -160,8 +165,11 @@ const FRAMES = [
     priceAdd: 70,
     thick: 26,
     swatch: '#8b6914',
-    bg: 'linear-gradient(135deg, #a8821e 0%, #7a5c10 24%, #bc9228 50%, #6a4e0c 74%, #9a7818 100%)',
-    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.1)',
+    bg: [
+      'repeating-linear-gradient(89deg, transparent 0px, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px, transparent 4px, transparent 9px, rgba(255,255,255,0.05) 9px, rgba(255,255,255,0.05) 10px)',
+      'linear-gradient(140deg, #c0a030 0%, #806012 24%, #d8b828 50%, #6a4c0c 74%, #a07e20 100%)',
+    ].join(', '),
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.12)',
   },
   {
     id: 'gallery-white',
@@ -191,28 +199,49 @@ function calcPrice(size, material, frame, mat) {
 
 /* ─── Frame Preview Component ─────────────────────────────────── */
 function FramePreview({ photo, size, frame, mat }) {
-  const PHOTO_W = 240
-  const PHOTO_H  = Math.round(PHOTO_W / size.aspect)
+  const [naturalRatio, setNaturalRatio] = useState(null)
 
-  const outerShadow = '0 28px 90px rgba(0,0,0,0.42), 0 12px 36px rgba(0,0,0,0.22), 1px 3px 0 rgba(255,255,255,0.04)'
+  useEffect(() => {
+    const img = new window.Image()
+    img.onload = () => setNaturalRatio(img.naturalWidth / img.naturalHeight)
+    img.src = photo.src
+  }, [photo.src])
 
-  const frameStyle =
-    frame.id !== 'none'
-      ? {
-          padding: `${frame.thick}px`,
-          background: frame.bg,
-          boxShadow: frame.inset ? `${frame.inset}, ${outerShadow}` : outerShadow,
-          transition: 'all 0.35s ease',
-        }
-      : {
-          boxShadow: outerShadow,
-          transition: 'all 0.35s ease',
-        }
+  // Scale preview size meaningfully per print size
+  const SIZE_MAP = {
+    '8x10':  110,
+    '11x14': 142,
+    '16x20': 182,
+    '20x24': 210,
+    '24x30': 246,
+    '30x40': 296,
+  }
+  const maxDim = SIZE_MAP[size.id] || 180
+  const imageRatio = naturalRatio || (2 / 3)
 
-  const matStyle =
-    mat.id !== 'none'
-      ? { padding: '22px', background: mat.color, transition: 'all 0.35s ease' }
-      : {}
+  let PHOTO_W, PHOTO_H
+  if (imageRatio >= 1) {
+    PHOTO_W = maxDim
+    PHOTO_H = Math.round(maxDim / imageRatio)
+  } else {
+    PHOTO_H = maxDim
+    PHOTO_W = Math.round(maxDim * imageRatio)
+  }
+
+  const outerShadow = '0 32px 100px rgba(0,0,0,0.55), 0 14px 40px rgba(0,0,0,0.28), 1px 3px 0 rgba(255,255,255,0.04)'
+
+  const frameStyle = frame.id !== 'none'
+    ? {
+        padding: `${frame.thick}px`,
+        background: frame.bg,
+        boxShadow: frame.inset ? `${frame.inset}, ${outerShadow}` : outerShadow,
+        transition: 'all 0.35s ease',
+      }
+    : { boxShadow: outerShadow, transition: 'all 0.35s ease' }
+
+  const matStyle = mat.id !== 'none'
+    ? { padding: '20px', background: mat.color, transition: 'all 0.35s ease' }
+    : {}
 
   const photoEl = (
     <img
@@ -220,39 +249,31 @@ function FramePreview({ photo, size, frame, mat }) {
       alt={photo.title}
       style={{
         display: 'block',
-        width: PHOTO_W,
-        height: PHOTO_H,
+        width: `${PHOTO_W}px`,
+        height: `${PHOTO_H}px`,
         objectFit: 'cover',
         transition: 'width 0.35s ease, height 0.35s ease',
       }}
     />
   )
 
+  const frameThick = frame.thick || 0
+  const matExtra = mat.id !== 'none' ? 40 : 0
+  const shadowW = PHOTO_W + (frameThick + matExtra / 2) * 2 + 20
+
   const caption = [
     frame.id !== 'none' && frame.label,
-    mat.id   !== 'none' && mat.label,
+    mat.id !== 'none' && mat.label,
     size.label,
-  ]
-    .filter(Boolean)
-    .join(' · ')
+  ].filter(Boolean).join(' · ')
 
   return (
     <div className="fp-scene">
-      {/* Wall decoration hooks */}
       <div className="fp-nail" />
-
       <div className="fp-artwork" style={frameStyle}>
         {mat.id !== 'none' ? <div style={matStyle}>{photoEl}</div> : photoEl}
       </div>
-
-      {/* Shadow beneath artwork */}
-      <div
-        className="fp-floor-shadow"
-        style={{
-          width: PHOTO_W + (frame.thick || 0) * 2 + (mat.id !== 'none' ? 44 : 0),
-        }}
-      />
-
+      <div className="fp-floor-shadow" style={{ width: `${shadowW}px` }} />
       <p className="fp-caption">{caption}</p>
     </div>
   )
@@ -311,6 +332,7 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
 
           {/* ── LEFT: live frame preview ── */}
           <div className="cm-preview-pane">
+            <div className="room-baseboard" />
             <FramePreview photo={product} size={size} frame={frame} mat={mat} />
           </div>
 

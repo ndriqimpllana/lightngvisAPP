@@ -191,34 +191,69 @@
 .cm-layout {
   display: grid;
   grid-template-columns: 1fr 430px;
-  height: 100%;
-  max-height: 92vh;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
 /* ── Preview pane ────────────────────────────────────────────── */
 .cm-preview-pane {
-  background: radial-gradient(ellipse at 50% 40%, #e6e2dc 0%, #d2cec8 60%, #c8c4bc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem 2rem 2.5rem;
   overflow: hidden;
   position: relative;
+  /* Living room: warm wall + wood floor */
+  background:
+    /* floor wood grain lines */
+    repeating-linear-gradient(
+      90deg,
+      transparent 0, transparent 52px,
+      rgba(0,0,0,0.025) 52px, rgba(0,0,0,0.025) 54px
+    ),
+    /* wall-to-floor gradient */
+    linear-gradient(
+      to bottom,
+      #ede4d5 0%,
+      #e5d9c8 68%,
+      #c8a878 68.5%,
+      #b08a58 72%,
+      #9e7848 100%
+    );
 }
 
-/* subtle wall-texture overlay */
+/* Ceiling shadow */
 .cm-preview-pane::before {
   content: '';
   position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 70px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.09) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ambient wall light from upper-left */
+.cm-preview-pane::after {
+  content: '';
+  position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 3px,
-    rgba(0,0,0,0.012) 3px,
-    rgba(0,0,0,0.012) 4px
-  );
+  background: radial-gradient(ellipse at 25% 20%, rgba(255,250,240,0.35) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Baseboard / skirting board */
+.room-baseboard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 32%;
+  height: 9px;
+  background: linear-gradient(to bottom, #d8c8a8 0%, #c4b090 50%, #b8a07a 100%);
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -229,6 +264,7 @@
   align-items: center;
   gap: 0;
   position: relative;
+  z-index: 3;
 }
 
 /* nail/hook on wall */
@@ -285,9 +321,11 @@
   border-left: 1px solid var(--gray-200);
   padding: 2rem 2.25rem;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-height: 0;
   /* custom thin scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--gray-200) transparent;
@@ -571,25 +609,31 @@
 @media (max-width: 980px) {
   .cm-layout {
     grid-template-columns: 1fr;
-    max-height: none;
-    overflow: visible;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .cm-modal {
     max-height: 92vh;
-    overflow-y: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   .cm-preview-pane {
-    min-height: 340px;
+    min-height: 320px;
+    max-height: 380px;
     padding: 2.5rem 1.5rem 2rem;
+    flex-shrink: 0;
   }
 
   .cm-options-pane {
     border-left: none;
     border-top: 1px solid var(--gray-200);
-    max-height: none;
-    overflow-y: visible;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
   }
 }
 
