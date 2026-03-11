@@ -1,15 +1,11 @@
 import { createContext, useContext, useState } from 'react'
+import { toast } from 'sonner'
 
 const CartContext = createContext(null)
-
-let _toastId = 0
 
 export function CartProvider({ children }) {
   const [items,  setItems ] = useState([])
   const [isOpen, setIsOpen] = useState(false)
-  const [toasts, setToasts] = useState([])
-
-  const removeToast = (id) => setToasts(prev => prev.filter(t => t.id !== id))
 
   const addItem = (item) => {
     setItems(prev => {
@@ -27,7 +23,9 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...item, qty: 1 }]
     })
-    setToasts(prev => [...prev, { id: ++_toastId, title: item.title, img: item.src }])
+    toast.success(`${item.title} added to cart`, {
+      description: `${item.size} · ${item.material}`,
+    })
     setIsOpen(true)
   }
 
@@ -47,7 +45,6 @@ export function CartProvider({ children }) {
     <CartContext.Provider value={{
       items, addItem, removeItem, updateQty, clearCart,
       totalCount, totalPrice, isOpen, setIsOpen,
-      toasts, removeToast,
     }}>
       {children}
     </CartContext.Provider>

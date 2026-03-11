@@ -10,7 +10,7 @@ import About from './components/About'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CartDrawer from './components/CartDrawer'
-import Toast from './components/Toast'
+import { Toaster } from 'sonner'
 
 function ShopWithSuccess() {
   const [params, setParams] = useSearchParams()
@@ -40,7 +40,7 @@ function App() {
     <CartProvider>
       <Navbar />
       <CartDrawer />
-      <Toast />
+      <Toaster richColors position="bottom-right" />
       <Routes>
         <Route path="/" element={<><Hero /><Gallery /><About /></>} />
         <Route path="/shop" element={<ShopWithSuccess />} />
