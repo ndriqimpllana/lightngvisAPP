@@ -47,7 +47,7 @@ const PRINT_SIZES = [
 const MATERIALS = [
   {
     id: 'fine-art',
-    label: 'Fine Art Paper',
+    label: 'Fine Paper',
     description: 'Archival 310gsm matte · museum-quality',
     mult: 1.0,
   },
@@ -55,37 +55,13 @@ const MATERIALS = [
     id: 'luster',
     label: 'Luster Paper',
     description: 'Satin smooth finish · minimal glare',
-    mult: 1.12,
-  },
-  {
-    id: 'metallic',
-    label: 'Metallic Paper',
-    description: 'Vibrant shimmer · deep rich blacks',
-    mult: 1.32,
+    mult: 1.15,
   },
   {
     id: 'canvas',
     label: 'Canvas',
     description: 'Stretched gallery-wrap · 1.5″ deep',
     mult: 1.65,
-  },
-  {
-    id: 'acrylic',
-    label: 'Acrylic Face Mount',
-    description: 'Ultra-sharp glass-like clarity',
-    mult: 2.45,
-  },
-  {
-    id: 'aluminum',
-    label: 'Aluminum / Metal',
-    description: 'Vivid HD print on brushed aluminum',
-    mult: 1.9,
-  },
-  {
-    id: 'bamboo',
-    label: 'Bamboo',
-    description: 'Eco-friendly natural wood surface',
-    mult: 1.75,
   },
 ]
 
@@ -102,7 +78,7 @@ const FRAMES = [
     id: 'classic-black',
     label: 'Classic Black',
     priceAdd: 45,
-    thick: 20,
+    thick: 22,
     swatch: '#1c1c1c',
     bg: 'linear-gradient(145deg, #2c2c2c 0%, #101010 35%, #2a2a2a 65%, #080808 100%)',
     inset: 'inset 0 0 0 2px rgba(255,255,255,0.07), inset 0 0 0 4px rgba(0,0,0,0.55)',
@@ -111,35 +87,36 @@ const FRAMES = [
     id: 'classic-white',
     label: 'Classic White',
     priceAdd: 45,
-    thick: 20,
+    thick: 22,
     swatch: '#f2f2f2',
     swatchBorder: '#d0d0d0',
     bg: 'linear-gradient(145deg, #ffffff 0%, #e8e8e8 35%, #f8f8f8 65%, #dcdcdc 100%)',
     inset: 'inset 0 0 0 2px rgba(0,0,0,0.07), inset 0 0 0 4px rgba(0,0,0,0.03)',
   },
   {
-    id: 'thin-silver',
-    label: 'Thin Silver',
-    priceAdd: 55,
-    thick: 10,
-    swatch: '#b8bcc4',
-    bg: 'linear-gradient(145deg, #eceef4 0%, #8890a8 12%, #d8dce8 24%, #6878a0 36%, #c8ccd8 50%, #8090b0 62%, #d0d4e0 76%, #9098b8 88%, #e0e4ee 100%)',
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.7)',
+    id: 'thin-black',
+    label: 'Thin Black',
+    priceAdd: 35,
+    thick: 8,
+    swatch: '#1c1c1c',
+    bg: 'linear-gradient(145deg, #2c2c2c 0%, #101010 35%, #2a2a2a 65%, #080808 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.07)',
   },
   {
-    id: 'thin-gold',
-    label: 'Thin Gold',
-    priceAdd: 75,
-    thick: 10,
-    swatch: '#c9a84c',
-    bg: 'linear-gradient(145deg, #f8e070 0%, #a87820 16%, #f0d050 32%, #906810 48%, #e8c840 64%, #b08828 80%, #f4d860 96%, #a07020 100%)',
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.45)',
+    id: 'thin-white',
+    label: 'Thin White',
+    priceAdd: 35,
+    thick: 8,
+    swatch: '#f2f2f2',
+    swatchBorder: '#d0d0d0',
+    bg: 'linear-gradient(145deg, #ffffff 0%, #e8e8e8 35%, #f8f8f8 65%, #dcdcdc 100%)',
+    inset: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
   },
   {
-    id: 'natural-wood',
-    label: 'Natural Wood',
+    id: 'wood',
+    label: 'Wood',
     priceAdd: 65,
-    thick: 22,
+    thick: 20,
     swatch: '#b8875a',
     bg: [
       'repeating-linear-gradient(91deg, transparent 0px, transparent 4px, rgba(0,0,0,0.04) 4px, rgba(0,0,0,0.04) 5px, transparent 5px, transparent 11px, rgba(255,255,255,0.06) 11px, rgba(255,255,255,0.06) 12px)',
@@ -148,10 +125,19 @@ const FRAMES = [
     inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.18)',
   },
   {
-    id: 'dark-walnut',
-    label: 'Dark Walnut',
+    id: 'thin-silver',
+    label: 'Thin Silver',
+    priceAdd: 55,
+    thick: 8,
+    swatch: '#b8bcc4',
+    bg: 'linear-gradient(145deg, #eceef4 0%, #8890a8 12%, #d8dce8 24%, #6878a0 36%, #c8ccd8 50%, #8090b0 62%, #d0d4e0 76%, #9098b8 88%, #e0e4ee 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.7)',
+  },
+  {
+    id: 'dark-walnut-classic',
+    label: 'Walnut Classic',
     priceAdd: 75,
-    thick: 24,
+    thick: 22,
     swatch: '#3d2b1f',
     bg: [
       'repeating-linear-gradient(90deg, transparent 0px, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px, transparent 6px, transparent 14px)',
@@ -160,26 +146,16 @@ const FRAMES = [
     inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.06)',
   },
   {
-    id: 'rustic-oak',
-    label: 'Rustic Oak',
-    priceAdd: 70,
-    thick: 26,
-    swatch: '#8b6914',
+    id: 'dark-walnut-thin',
+    label: 'Walnut Thin',
+    priceAdd: 65,
+    thick: 10,
+    swatch: '#3d2b1f',
     bg: [
-      'repeating-linear-gradient(89deg, transparent 0px, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px, transparent 4px, transparent 9px, rgba(255,255,255,0.05) 9px, rgba(255,255,255,0.05) 10px)',
-      'linear-gradient(140deg, #c0a030 0%, #806012 24%, #d8b828 50%, #6a4c0c 74%, #a07e20 100%)',
+      'repeating-linear-gradient(90deg, transparent 0px, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px, transparent 6px, transparent 14px)',
+      'linear-gradient(140deg, #4e3528 0%, #2a1810 28%, #5a3e2a 54%, #241408 78%, #3e2818 100%)',
     ].join(', '),
-    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.12)',
-  },
-  {
-    id: 'gallery-white',
-    label: 'Gallery White',
-    priceAdd: 85,
-    thick: 40,
-    swatch: '#fafafa',
-    swatchBorder: '#d8d8d8',
-    bg: 'linear-gradient(145deg, #ffffff 0%, #f0f0f0 35%, #ffffff 65%, #e8e8e8 100%)',
-    inset: 'inset 0 0 0 2px rgba(0,0,0,0.05), inset 0 0 0 5px rgba(0,0,0,0.025)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.06)',
   },
 ]
 
@@ -197,6 +173,16 @@ function calcPrice(size, material, frame, mat) {
   return Math.round(size.basePrice * material.mult + frame.priceAdd + mat.priceAdd)
 }
 
+/* ─── Size map — pixels relative to room scene ────────────────── */
+const SIZE_MAP = {
+  '8x10':  100,
+  '11x14': 145,
+  '16x20': 198,
+  '20x24': 234,
+  '24x30': 275,
+  '30x40': 330,
+}
+
 /* ─── Frame Preview Component ─────────────────────────────────── */
 function FramePreview({ photo, size, frame, mat }) {
   const [naturalRatio, setNaturalRatio] = useState(null)
@@ -207,15 +193,6 @@ function FramePreview({ photo, size, frame, mat }) {
     img.src = photo.src
   }, [photo.src])
 
-  // Scale preview size meaningfully per print size
-  const SIZE_MAP = {
-    '8x10':  110,
-    '11x14': 142,
-    '16x20': 182,
-    '20x24': 210,
-    '24x30': 246,
-    '30x40': 296,
-  }
   const maxDim = SIZE_MAP[size.id] || 180
   const imageRatio = naturalRatio || (2 / 3)
 
@@ -228,7 +205,7 @@ function FramePreview({ photo, size, frame, mat }) {
     PHOTO_W = Math.round(maxDim * imageRatio)
   }
 
-  const outerShadow = '0 32px 100px rgba(0,0,0,0.55), 0 14px 40px rgba(0,0,0,0.28), 1px 3px 0 rgba(255,255,255,0.04)'
+  const outerShadow = '0 40px 120px rgba(0,0,0,0.65), 0 16px 48px rgba(0,0,0,0.35), 2px 4px 0 rgba(255,255,255,0.04)'
 
   const frameStyle = frame.id !== 'none'
     ? {
@@ -282,20 +259,18 @@ function FramePreview({ photo, size, frame, mat }) {
 /* ─── Customizer Modal ────────────────────────────────────────── */
 function CustomizerModal({ product, onClose, onAddToCart }) {
   const { t } = useTranslation()
-  const [size,     setSize    ] = useState(PRINT_SIZES[1])   // 11×14
-  const [material, setMaterial] = useState(MATERIALS[0])    // fine art
-  const [frame,    setFrame   ] = useState(FRAMES[1])        // classic black
-  const [mat,      setMat     ] = useState(MATS[1])          // white mat
+  const [size,     setSize    ] = useState(PRINT_SIZES[1])
+  const [material, setMaterial] = useState(MATERIALS[0])
+  const [frame,    setFrame   ] = useState(FRAMES[1])
+  const [mat,      setMat     ] = useState(MATS[1])
 
   const price = calcPrice(size, material, frame, mat)
 
-  // Lock body scroll while open
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
   }, [])
 
-  // Close on Escape key
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', handler)
@@ -330,16 +305,14 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
 
         <div className="cm-layout">
 
-          {/* ── LEFT: live frame preview ── */}
+          {/* ── LEFT: live frame preview in room ── */}
           <div className="cm-preview-pane">
-            <div className="room-baseboard" />
             <FramePreview photo={product} size={size} frame={frame} mat={mat} />
           </div>
 
           {/* ── RIGHT: options ── */}
           <div className="cm-options-pane">
 
-            {/* Header */}
             <div className="cm-header">
               <h2 className="cm-title">{product.title}</h2>
               <span className="cm-meta">{product.category} Photography</span>
@@ -527,21 +500,18 @@ function Shop() {
         <p>{t('shop.subheading')}</p>
       </div>
 
-      {/* Value props bar */}
       <div className="shop__props">
         <span>✦ {t('shop.prop1')}</span>
         <span>✦ {t('shop.prop2')}</span>
         <span>✦ {t('shop.prop3')}</span>
       </div>
 
-      {/* Product grid */}
       <div className="shop__grid">
         {PRODUCTS.map(p => (
           <ProductCard key={p.id} product={p} onSelect={setSelected} />
         ))}
       </div>
 
-      {/* Customizer */}
       {selected && (
         <CustomizerModal
           product={selected}
@@ -550,7 +520,6 @@ function Shop() {
         />
       )}
 
-      {/* Cart toast */}
       {toast && <CartToast item={toast} onDismiss={() => setToast(null)} />}
     </section>
   )
