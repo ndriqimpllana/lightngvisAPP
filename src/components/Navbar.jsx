@@ -56,6 +56,7 @@ function Navbar() {
 
           <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
             <li><a href="#work" onClick={handleNavClick}>{t('nav.work')}</a></li>
+            <li><a href="#shop" onClick={handleNavClick}>{t('nav.shop')}</a></li>
             <li><a href="#about" onClick={handleNavClick}>{t('nav.about')}</a></li>
             <li><a href="#contact" onClick={handleNavClick}>{t('nav.contact')}</a></li>
           </ul>

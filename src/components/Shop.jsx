@@ -1,0 +1,537 @@
+import { useState, useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import './Shop.css'
+
+import img1  from '../assets/img/ANDY4354.jpg'
+import img2  from '../assets/img/ANDY1168.jpg'
+import img3  from '../assets/img/ANDY4279.jpg'
+import img4  from '../assets/img/ANDY2067.jpg'
+import img5  from '../assets/img/6W0A2737.jpg'
+import img6  from '../assets/img/ANDY1105.jpg'
+import img7  from '../assets/img/6W0A6103.jpg'
+import img8  from '../assets/img/1O4A7889.jpg'
+import img9  from '../assets/img/1O4A8100.jpg'
+import img10 from '../assets/img/ANDY8813-2.jpg'
+import img11 from '../assets/img/1O4A5122.jpg'
+import img12 from '../assets/img/1O4A4132.jpg'
+import img13 from '../assets/img/1O4A3840.jpg'
+
+/* ─── Product catalog ─────────────────────────────────────────── */
+const PRODUCTS = [
+  { id: 1,  src: img1,  title: 'Untitled I',    category: 'Street', edition: 10 },
+  { id: 2,  src: img2,  title: 'Untitled II',   category: 'Street', edition: 10 },
+  { id: 3,  src: img3,  title: 'Untitled III',  category: 'Street', edition: 10 },
+  { id: 4,  src: img4,  title: 'Untitled IV',   category: 'Street', edition: 15 },
+  { id: 5,  src: img5,  title: 'Untitled V',    category: 'Street', edition: 10 },
+  { id: 6,  src: img6,  title: 'Untitled VI',   category: 'Street', edition: 10 },
+  { id: 7,  src: img7,  title: 'Untitled VII',  category: 'Street', edition: 15 },
+  { id: 8,  src: img8,  title: 'Untitled VIII', category: 'Street', edition: 10 },
+  { id: 9,  src: img9,  title: 'Untitled IX',   category: 'Street', edition: 10 },
+  { id: 10, src: img10, title: 'Untitled X',    category: 'Street', edition: 10 },
+  { id: 11, src: img11, title: 'Untitled XI',   category: 'Street', edition: 15 },
+  { id: 12, src: img12, title: 'Untitled XII',  category: 'Street', edition: 10 },
+  { id: 13, src: img13, title: 'Untitled XIII', category: 'Street', edition: 10 },
+]
+
+/* ─── Print sizes ─────────────────────────────────────────────── */
+const PRINT_SIZES = [
+  { id: '8x10',  label: '8 × 10"',  size: '8 × 10 in',  basePrice: 38,  aspect: 8  / 10  },
+  { id: '11x14', label: '11 × 14"', size: '11 × 14 in', basePrice: 58,  aspect: 11 / 14  },
+  { id: '16x20', label: '16 × 20"', size: '16 × 20 in', basePrice: 88,  aspect: 16 / 20  },
+  { id: '20x24', label: '20 × 24"', size: '20 × 24 in', basePrice: 128, aspect: 20 / 24  },
+  { id: '24x30', label: '24 × 30"', size: '24 × 30 in', basePrice: 168, aspect: 24 / 30  },
+  { id: '30x40', label: '30 × 40"', size: '30 × 40 in', basePrice: 240, aspect: 30 / 40  },
+]
+
+/* ─── Materials ───────────────────────────────────────────────── */
+const MATERIALS = [
+  {
+    id: 'fine-art',
+    label: 'Fine Art Paper',
+    description: 'Archival 310gsm matte · museum-quality',
+    mult: 1.0,
+  },
+  {
+    id: 'luster',
+    label: 'Luster Paper',
+    description: 'Satin smooth finish · minimal glare',
+    mult: 1.12,
+  },
+  {
+    id: 'metallic',
+    label: 'Metallic Paper',
+    description: 'Vibrant shimmer · deep rich blacks',
+    mult: 1.32,
+  },
+  {
+    id: 'canvas',
+    label: 'Canvas',
+    description: 'Stretched gallery-wrap · 1.5″ deep',
+    mult: 1.65,
+  },
+  {
+    id: 'acrylic',
+    label: 'Acrylic Face Mount',
+    description: 'Ultra-sharp glass-like clarity',
+    mult: 2.45,
+  },
+  {
+    id: 'aluminum',
+    label: 'Aluminum / Metal',
+    description: 'Vivid HD print on brushed aluminum',
+    mult: 1.9,
+  },
+  {
+    id: 'bamboo',
+    label: 'Bamboo',
+    description: 'Eco-friendly natural wood surface',
+    mult: 1.75,
+  },
+]
+
+/* ─── Frames ──────────────────────────────────────────────────── */
+const FRAMES = [
+  {
+    id: 'none',
+    label: 'No Frame',
+    priceAdd: 0,
+    thick: 0,
+    swatch: 'transparent',
+    swatchDashed: true,
+  },
+  {
+    id: 'classic-black',
+    label: 'Classic Black',
+    priceAdd: 45,
+    thick: 20,
+    swatch: '#1c1c1c',
+    bg: 'linear-gradient(145deg, #2c2c2c 0%, #101010 35%, #2a2a2a 65%, #080808 100%)',
+    inset: 'inset 0 0 0 2px rgba(255,255,255,0.07), inset 0 0 0 4px rgba(0,0,0,0.55)',
+  },
+  {
+    id: 'classic-white',
+    label: 'Classic White',
+    priceAdd: 45,
+    thick: 20,
+    swatch: '#f2f2f2',
+    swatchBorder: '#d0d0d0',
+    bg: 'linear-gradient(145deg, #ffffff 0%, #e8e8e8 35%, #f8f8f8 65%, #dcdcdc 100%)',
+    inset: 'inset 0 0 0 2px rgba(0,0,0,0.07), inset 0 0 0 4px rgba(0,0,0,0.03)',
+  },
+  {
+    id: 'thin-silver',
+    label: 'Thin Silver',
+    priceAdd: 55,
+    thick: 10,
+    swatch: '#b8bcc4',
+    bg: 'linear-gradient(145deg, #d4d8e0 0%, #8890a0 30%, #c8ccd4 60%, #9098a8 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.45)',
+  },
+  {
+    id: 'thin-gold',
+    label: 'Thin Gold',
+    priceAdd: 75,
+    thick: 10,
+    swatch: '#c9a84c',
+    bg: 'linear-gradient(145deg, #e2c060 0%, #a07830 30%, #d4b050 60%, #907020 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.3)',
+  },
+  {
+    id: 'natural-wood',
+    label: 'Natural Wood',
+    priceAdd: 65,
+    thick: 22,
+    swatch: '#b8875a',
+    bg: 'linear-gradient(135deg, #cc9a6e 0%, #a06838 20%, #d8a87c 42%, #986030 64%, #c09060 82%, #a07040 100%)',
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.14)',
+  },
+  {
+    id: 'dark-walnut',
+    label: 'Dark Walnut',
+    priceAdd: 75,
+    thick: 24,
+    swatch: '#3d2b1f',
+    bg: 'linear-gradient(135deg, #4e3528 0%, #2a1810 28%, #5a3e2a 54%, #241408 78%, #3e2818 100%)',
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.06)',
+  },
+  {
+    id: 'rustic-oak',
+    label: 'Rustic Oak',
+    priceAdd: 70,
+    thick: 26,
+    swatch: '#8b6914',
+    bg: 'linear-gradient(135deg, #a8821e 0%, #7a5c10 24%, #bc9228 50%, #6a4e0c 74%, #9a7818 100%)',
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.1)',
+  },
+  {
+    id: 'gallery-white',
+    label: 'Gallery White',
+    priceAdd: 85,
+    thick: 40,
+    swatch: '#fafafa',
+    swatchBorder: '#d8d8d8',
+    bg: 'linear-gradient(145deg, #ffffff 0%, #f0f0f0 35%, #ffffff 65%, #e8e8e8 100%)',
+    inset: 'inset 0 0 0 2px rgba(0,0,0,0.05), inset 0 0 0 5px rgba(0,0,0,0.025)',
+  },
+]
+
+/* ─── Mat boards ──────────────────────────────────────────────── */
+const MATS = [
+  { id: 'none',  label: 'No Mat', priceAdd: 0,  color: null,      dashed: true },
+  { id: 'white', label: 'White',  priceAdd: 20, color: '#f7f7f7', border: '#ddd' },
+  { id: 'cream', label: 'Cream',  priceAdd: 20, color: '#f3ede0', border: '#d8cdb4' },
+  { id: 'black', label: 'Black',  priceAdd: 20, color: '#181818'  },
+  { id: 'gray',  label: 'Gray',   priceAdd: 20, color: '#8a8a8a'  },
+]
+
+/* ─── Price calculator ────────────────────────────────────────── */
+function calcPrice(size, material, frame, mat) {
+  return Math.round(size.basePrice * material.mult + frame.priceAdd + mat.priceAdd)
+}
+
+/* ─── Frame Preview Component ─────────────────────────────────── */
+function FramePreview({ photo, size, frame, mat }) {
+  const PHOTO_W = 240
+  const PHOTO_H  = Math.round(PHOTO_W / size.aspect)
+
+  const outerShadow = '0 28px 90px rgba(0,0,0,0.42), 0 12px 36px rgba(0,0,0,0.22), 1px 3px 0 rgba(255,255,255,0.04)'
+
+  const frameStyle =
+    frame.id !== 'none'
+      ? {
+          padding: `${frame.thick}px`,
+          background: frame.bg,
+          boxShadow: frame.inset ? `${frame.inset}, ${outerShadow}` : outerShadow,
+          transition: 'all 0.35s ease',
+        }
+      : {
+          boxShadow: outerShadow,
+          transition: 'all 0.35s ease',
+        }
+
+  const matStyle =
+    mat.id !== 'none'
+      ? { padding: '22px', background: mat.color, transition: 'all 0.35s ease' }
+      : {}
+
+  const photoEl = (
+    <img
+      src={photo.src}
+      alt={photo.title}
+      style={{
+        display: 'block',
+        width: PHOTO_W,
+        height: PHOTO_H,
+        objectFit: 'cover',
+        transition: 'width 0.35s ease, height 0.35s ease',
+      }}
+    />
+  )
+
+  const caption = [
+    frame.id !== 'none' && frame.label,
+    mat.id   !== 'none' && mat.label,
+    size.label,
+  ]
+    .filter(Boolean)
+    .join(' · ')
+
+  return (
+    <div className="fp-scene">
+      {/* Wall decoration hooks */}
+      <div className="fp-nail" />
+
+      <div className="fp-artwork" style={frameStyle}>
+        {mat.id !== 'none' ? <div style={matStyle}>{photoEl}</div> : photoEl}
+      </div>
+
+      {/* Shadow beneath artwork */}
+      <div
+        className="fp-floor-shadow"
+        style={{
+          width: PHOTO_W + (frame.thick || 0) * 2 + (mat.id !== 'none' ? 44 : 0),
+        }}
+      />
+
+      <p className="fp-caption">{caption}</p>
+    </div>
+  )
+}
+
+/* ─── Customizer Modal ────────────────────────────────────────── */
+function CustomizerModal({ product, onClose, onAddToCart }) {
+  const { t } = useTranslation()
+  const [size,     setSize    ] = useState(PRINT_SIZES[1])   // 11×14
+  const [material, setMaterial] = useState(MATERIALS[0])    // fine art
+  const [frame,    setFrame   ] = useState(FRAMES[1])        // classic black
+  const [mat,      setMat     ] = useState(MATS[1])          // white mat
+
+  const price = calcPrice(size, material, frame, mat)
+
+  // Lock body scroll while open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) onClose()
+  }
+
+  const handleAddToCart = () => {
+    onAddToCart({
+      title:    product.title,
+      src:      product.src,
+      size:     size.label,
+      material: material.label,
+      frame:    frame.label,
+      mat:      mat.label,
+      price,
+    })
+  }
+
+  return (
+    <div className="cm-overlay" onClick={handleOverlayClick}>
+      <div className="cm-modal" role="dialog" aria-modal="true">
+
+        <button className="cm-close" onClick={onClose} aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+
+        <div className="cm-layout">
+
+          {/* ── LEFT: live frame preview ── */}
+          <div className="cm-preview-pane">
+            <FramePreview photo={product} size={size} frame={frame} mat={mat} />
+          </div>
+
+          {/* ── RIGHT: options ── */}
+          <div className="cm-options-pane">
+
+            {/* Header */}
+            <div className="cm-header">
+              <h2 className="cm-title">{product.title}</h2>
+              <span className="cm-meta">{product.category} Photography</span>
+              <span className="cm-edition">{t('shop.limitedEdition')} {product.edition}</span>
+            </div>
+
+            <div className="cm-divider" />
+
+            {/* Print Size */}
+            <div className="opt-group">
+              <div className="opt-label">{t('shop.size')}</div>
+              <div className="opt-pills">
+                {PRINT_SIZES.map(s => (
+                  <button
+                    key={s.id}
+                    className={`opt-pill ${size.id === s.id ? 'opt-pill--on' : ''}`}
+                    onClick={() => setSize(s)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Material */}
+            <div className="opt-group">
+              <div className="opt-label">{t('shop.material')}</div>
+              <div className="mat-list">
+                {MATERIALS.map(m => (
+                  <button
+                    key={m.id}
+                    className={`mat-item ${material.id === m.id ? 'mat-item--on' : ''}`}
+                    onClick={() => setMaterial(m)}
+                  >
+                    <span className="mat-item__name">{m.label}</span>
+                    <span className="mat-item__desc">{m.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Frame */}
+            <div className="opt-group">
+              <div className="opt-label">
+                {t('shop.frame')}
+                {frame.priceAdd > 0 && (
+                  <span className="opt-add">+${frame.priceAdd}</span>
+                )}
+              </div>
+              <div className="sw-grid">
+                {FRAMES.map(f => (
+                  <button
+                    key={f.id}
+                    className={`sw-btn ${frame.id === f.id ? 'sw-btn--on' : ''}`}
+                    onClick={() => setFrame(f)}
+                    title={f.label}
+                  >
+                    <span
+                      className="sw-dot"
+                      style={
+                        f.swatchDashed
+                          ? { background: 'transparent', border: '2px dashed #bbb' }
+                          : {
+                              background: f.bg || f.swatch,
+                              border: f.swatchBorder ? `1px solid ${f.swatchBorder}` : 'none',
+                            }
+                      }
+                    />
+                    <span className="sw-name">{f.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Mat board */}
+            <div className="opt-group">
+              <div className="opt-label">
+                {t('shop.mat')}
+                {mat.priceAdd > 0 && (
+                  <span className="opt-add">+${mat.priceAdd}</span>
+                )}
+              </div>
+              <div className="mat-swatches">
+                {MATS.map(m => (
+                  <button
+                    key={m.id}
+                    className={`msw-btn ${mat.id === m.id ? 'msw-btn--on' : ''}`}
+                    onClick={() => setMat(m)}
+                    title={m.label}
+                  >
+                    <span
+                      className="msw-dot"
+                      style={
+                        m.dashed
+                          ? { background: 'transparent', border: '2px dashed #bbb' }
+                          : {
+                              background: m.color,
+                              border: m.border ? `1px solid ${m.border}` : 'none',
+                            }
+                      }
+                    />
+                    <span className="msw-name">{m.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price + CTA */}
+            <div className="cm-cta">
+              <div className="cm-price-row">
+                <span className="cm-price-label">{t('shop.total')}</span>
+                <span className="cm-price-amount">${price}</span>
+              </div>
+              <button className="btn cm-add-btn" onClick={handleAddToCart}>
+                {t('shop.addToCart')}
+              </button>
+              <p className="cm-note">{t('shop.note')}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Cart Toast ──────────────────────────────────────────────── */
+function CartToast({ item, onDismiss }) {
+  return (
+    <div className="cart-toast">
+      <div className="ct-check">✓</div>
+      <div className="ct-info">
+        <strong>{item.title}</strong>
+        <span>{item.size} · {item.material}</span>
+        <span>{item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}</span>
+      </div>
+      <div className="ct-price">${item.price}</div>
+      <button className="ct-close" onClick={onDismiss} aria-label="Dismiss">×</button>
+    </div>
+  )
+}
+
+/* ─── Product Card ────────────────────────────────────────────── */
+function ProductCard({ product, onSelect }) {
+  const { t } = useTranslation()
+  return (
+    <article className="sc-card" onClick={() => onSelect(product)}>
+      <div className="sc-img-wrap">
+        <img src={product.src} alt={product.title} loading="lazy" className="sc-img" />
+        <div className="sc-overlay">
+          <span className="sc-cta-btn">{t('shop.customize')}</span>
+        </div>
+      </div>
+      <div className="sc-info">
+        <div>
+          <h3 className="sc-title">{product.title}</h3>
+          <p className="sc-edition">{t('shop.edition')} {product.edition}</p>
+        </div>
+        <p className="sc-from">
+          <span className="sc-from-label">{t('shop.from')}</span>
+          <span className="sc-from-price">${PRINT_SIZES[0].basePrice}</span>
+        </p>
+      </div>
+    </article>
+  )
+}
+
+/* ─── Main Shop Section ───────────────────────────────────────── */
+function Shop() {
+  const { t } = useTranslation()
+  const [selected, setSelected ] = useState(null)
+  const [toast,    setToast    ] = useState(null)
+
+  const handleAddToCart = useCallback((item) => {
+    setSelected(null)
+    setToast(item)
+    const id = setTimeout(() => setToast(null), 4500)
+    return () => clearTimeout(id)
+  }, [])
+
+  return (
+    <section id="shop" className="shop section">
+      <div className="section-header">
+        <h2>{t('shop.heading')}</h2>
+        <p>{t('shop.subheading')}</p>
+      </div>
+
+      {/* Value props bar */}
+      <div className="shop__props">
+        <span>✦ {t('shop.prop1')}</span>
+        <span>✦ {t('shop.prop2')}</span>
+        <span>✦ {t('shop.prop3')}</span>
+      </div>
+
+      {/* Product grid */}
+      <div className="shop__grid">
+        {PRODUCTS.map(p => (
+          <ProductCard key={p.id} product={p} onSelect={setSelected} />
+        ))}
+      </div>
+
+      {/* Customizer */}
+      {selected && (
+        <CustomizerModal
+          product={selected}
+          onClose={() => setSelected(null)}
+          onAddToCart={handleAddToCart}
+        />
+      )}
+
+      {/* Cart toast */}
+      {toast && <CartToast item={toast} onDismiss={() => setToast(null)} />}
+    </section>
+  )
+}
+
+export default Shop
