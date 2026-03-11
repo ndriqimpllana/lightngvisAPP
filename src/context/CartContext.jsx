@@ -1,11 +1,18 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { toast } from 'sonner'
 
 const CartContext = createContext(null)
 
 export function CartProvider({ children }) {
-  const [items,  setItems ] = useState([])
+  const [items, setItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cart')) || [] }
+    catch { return [] }
+  })
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(items))
+  }, [items])
 
   const addItem = (item) => {
     setItems(prev => {
