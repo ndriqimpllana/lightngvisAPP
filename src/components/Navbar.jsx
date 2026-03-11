@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import './Navbar.css'
 
@@ -34,7 +34,24 @@ function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const navigate = useNavigate()
+
   const handleNavClick = () => setMenuOpen(false)
+
+  const handleSectionLink = (sectionId) => {
+    setMenuOpen(false)
+    const scrollToSection = () => {
+      const el = document.getElementById(sectionId)
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }
+    if (window.location.pathname !== '/') {
+      navigate('/')
+      setTimeout(scrollToSection, 100)
+    } else {
+      scrollToSection()
+    }
+  }
+
   const currentLang = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0]
 
   return (
@@ -56,9 +73,9 @@ function Navbar() {
           </button>
 
           <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
-            <li><a href="/#work" onClick={handleNavClick}>{t('nav.work')}</a></li>
+            <li><button className="navbar__section-link" onClick={() => handleSectionLink('work')}>{t('nav.work')}</button></li>
             <li><Link to="/shop" onClick={handleNavClick}>{t('nav.shop')}</Link></li>
-            <li><a href="/#about" onClick={handleNavClick}>{t('nav.about')}</a></li>
+            <li><button className="navbar__section-link" onClick={() => handleSectionLink('about')}>{t('nav.about')}</button></li>
             <li><Link to="/contact" onClick={handleNavClick}>{t('nav.contact')}</Link></li>
           </ul>
 

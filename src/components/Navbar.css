@@ -34,7 +34,8 @@
   gap: 2.5rem;
 }
 
-.navbar__links a {
+.navbar__links a,
+.navbar__section-link {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -42,7 +43,17 @@
   padding-bottom: 2px;
 }
 
-.navbar__links a::after {
+.navbar__section-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  padding-bottom: 2px;
+}
+
+.navbar__links a::after,
+.navbar__section-link::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -53,7 +64,8 @@
   transition: width var(--transition);
 }
 
-.navbar__links a:hover::after {
+.navbar__links a:hover::after,
+.navbar__section-link:hover::after {
   width: 100%;
 }
 
