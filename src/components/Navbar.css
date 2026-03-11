@@ -153,6 +153,42 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Cart ── */
+.navbar__cart {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--black);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: opacity var(--transition);
+}
+
+.navbar__cart:hover {
+  opacity: 0.6;
+}
+
+.navbar__cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background-color: var(--black);
+  color: var(--white);
+  font-size: 0.55rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  min-width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 /* ── Hamburger ── */
 .navbar__toggle {
   display: none;
