@@ -11,7 +11,8 @@ const CartDrawer = () => {
     updateQuantity, 
     cartTotal, 
     cartCount,
-    checkout 
+    checkout,
+    isCheckingOut
   } = useCart();
 
   // We render the component but control visibility with CSS classes
@@ -69,7 +70,13 @@ const CartDrawer = () => {
                 <span>Total</span>
                 <span>${cartTotal.toFixed(2)}</span>
               </div>
-              <button className="btn cart-drawer__checkout" onClick={checkout}>Checkout</button>
+              <button 
+                className="btn cart-drawer__checkout" 
+                onClick={checkout}
+                disabled={isCheckingOut || cart.length === 0}
+              >
+                {isCheckingOut ? 'Processing...' : 'Checkout'}
+              </button>
               <p className="cart-drawer__secure">Secured by Stripe</p>
             </div>
           </>

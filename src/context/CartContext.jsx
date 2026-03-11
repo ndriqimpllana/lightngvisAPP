@@ -19,6 +19,7 @@ export const CartProvider = ({ children }) => {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Persist to local storage whenever cart changes
   useEffect(() => {
@@ -69,19 +70,38 @@ export const CartProvider = ({ children }) => {
   const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   const checkout = async () => {
+    if (isCheckingOut) return;
+    setIsCheckingOut(true);
+
     const stripe = await stripePromise;
     
-    // TODO: Call your backend to create a Checkout Session
-    // const response = await fetch('/api/create-checkout-session', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ items: cart }),
-    // });
-    // const session = await response.json();
-    // const result = await stripe.redirectToCheckout({ sessionId: session.id });
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart }),
+      });
 
-    console.log("Processing Checkout for:", cart);
-    alert("Checkout initiated. You need to connect this function to your backend API to create a Stripe Session.");
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({ error: 'Could not initiate checkout.' }));
+        console.error("Failed to create checkout session:", errorBody.error);
+        alert(`Error: ${errorBody.error}`);
+        return;
+      }
+
+      const session = await response.json();
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+
+      if (result.error) {
+        console.error(result.error.message);
+        alert(result.error.message);
+      }
+    } catch (error) {
+      console.error("Checkout process error:", error);
+      alert("An unexpected error occurred during checkout. Please try again.");
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   return (
@@ -96,7 +116,8 @@ export const CartProvider = ({ children }) => {
       updateQuantity,
       cartTotal,
       cartCount,
-      checkout
+      checkout,
+      isCheckingOut
     }}>
       {children}
     </CartContext.Provider>
