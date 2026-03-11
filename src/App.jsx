@@ -40,7 +40,7 @@ function App() {
     <CartProvider>
       <Navbar />
       <CartDrawer />
-      <Toaster richColors position="bottom-right" />
+      <Toaster richColors position="bottom-right" duration={1000} />
       <Routes>
         <Route path="/" element={<><Hero /><Gallery /><About /></>} />
         <Route path="/shop" element={<ShopWithSuccess />} />
