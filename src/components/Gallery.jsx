@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import './Gallery.css'
 
@@ -34,7 +34,24 @@ const photos = [
 
 function Gallery() {
   const { t } = useTranslation()
-  const [lightbox, setLightbox] = useState(null)
+  const [activeIndex, setActiveIndex] = useState(null)
+
+  const prev = () => setActiveIndex((i) => (i - 1 + photos.length) % photos.length)
+  const next = () => setActiveIndex((i) => (i + 1) % photos.length)
+  const close = () => setActiveIndex(null)
+
+  useEffect(() => {
+    if (activeIndex === null) return
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft') prev()
+      else if (e.key === 'ArrowRight') next()
+      else if (e.key === 'Escape') close()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [activeIndex])
+
+  const current = activeIndex !== null ? photos[activeIndex] : null
 
   return (
     <section id="work" className="gallery section">
@@ -44,11 +61,11 @@ function Gallery() {
       </div>
 
       <div className="gallery__grid">
-        {photos.map((item) => (
+        {photos.map((item, index) => (
           <div
             key={item.id}
             className="gallery__item"
-            onClick={() => setLightbox(item)}
+            onClick={() => setActiveIndex(index)}
           >
             <img
               className="gallery__img"
@@ -65,22 +82,29 @@ function Gallery() {
       </div>
 
       {/* Lightbox */}
-      {lightbox && (
-        <div className="lightbox" onClick={() => setLightbox(null)}>
-          <button className="lightbox__close" onClick={() => setLightbox(null)}>
-            &times;
+      {current && (
+        <div className="lightbox" onClick={close}>
+          <button className="lightbox__close" onClick={close}>&times;</button>
+
+          <button className="lightbox__nav lightbox__nav--prev" onClick={(e) => { e.stopPropagation(); prev() }}>
+            &#8592;
           </button>
+
           <div className="lightbox__content" onClick={(e) => e.stopPropagation()}>
             <img
               className="lightbox__img"
-              src={lightbox.src}
-              alt={lightbox.title}
+              src={current.src}
+              alt={current.title}
             />
             <div className="lightbox__info">
-              <h3>{lightbox.title}</h3>
-              <span>{lightbox.category}</span>
+              <h3>{current.title}</h3>
+              <span>{current.category}</span>
             </div>
           </div>
+
+          <button className="lightbox__nav lightbox__nav--next" onClick={(e) => { e.stopPropagation(); next() }}>
+            &#8594;
+          </button>
         </div>
       )}
     </section>

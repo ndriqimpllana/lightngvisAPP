@@ -78,10 +78,41 @@
   top: 1.5rem;
   right: 2rem;
   background: none;
+  border: none;
   color: var(--white);
   font-size: 2rem;
   font-weight: 300;
   line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 1rem;
+  opacity: 0.6;
+  transition: opacity var(--transition);
+  z-index: 1;
+  line-height: 1;
+}
+
+.lightbox__nav:hover {
+  opacity: 1;
+}
+
+.lightbox__nav--prev {
+  left: 1.5rem;
+}
+
+.lightbox__nav--next {
+  right: 1.5rem;
 }
 
 .lightbox__content {
