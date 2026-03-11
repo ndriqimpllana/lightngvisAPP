@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useCart } from '../context/CartContext'
 import './Shop.css'
 
 import img1  from '../assets/img/ANDY4354.jpg'
@@ -289,22 +288,12 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
 /* ─── Product Card ─────────────────────────────────────────────── */
 function ProductCard({ product, onCustomize }) {
   const { t } = useTranslation()
-  const { addItem } = useCart()
   const [size,     setSize    ] = useState(PRINT_SIZES[1])
   const [material, setMaterial] = useState(MATERIALS[0])
 
   const price = Math.round(size.basePrice * material.mult)
 
   const handleOrder = () => {
-    addItem({
-      title:    product.title,
-      src:      product.src,
-      size:     size.label,
-      material: material.label,
-      frame:    'No Frame',
-      mat:      'No Mat',
-      price,
-    })
   }
 
   return (
@@ -368,11 +357,9 @@ function ProductCard({ product, onCustomize }) {
 /* ─── Main Shop Section ───────────────────────────────────────── */
 function Shop() {
   const { t } = useTranslation()
-  const { addItem } = useCart()
   const [selected, setSelected] = useState(null)
 
   const handleAddToCart = (item) => {
-    addItem(item)
     setSelected(null)
   }
 
