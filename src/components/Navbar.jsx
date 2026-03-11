@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import './Navbar.css'
 
@@ -39,9 +40,9 @@ function Navbar() {
   return (
     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner">
-        <a href="#hero" className="navbar__logo">
+        <Link to="/" className="navbar__logo">
           LIGHTNGVIS
-        </a>
+        </Link>
 
         <div className="navbar__right">
           <button
@@ -55,10 +56,10 @@ function Navbar() {
           </button>
 
           <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
-            <li><a href="#work" onClick={handleNavClick}>{t('nav.work')}</a></li>
-            <li><a href="#shop" onClick={handleNavClick}>{t('nav.shop')}</a></li>
-            <li><a href="#about" onClick={handleNavClick}>{t('nav.about')}</a></li>
-            <li><a href="#contact" onClick={handleNavClick}>{t('nav.contact')}</a></li>
+            <li><a href="/#work" onClick={handleNavClick}>{t('nav.work')}</a></li>
+            <li><Link to="/shop" onClick={handleNavClick}>{t('nav.shop')}</Link></li>
+            <li><a href="/#about" onClick={handleNavClick}>{t('nav.about')}</a></li>
+            <li><Link to="/contact" onClick={handleNavClick}>{t('nav.contact')}</Link></li>
           </ul>
 
           {/* Language dropdown */}

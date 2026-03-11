@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -11,11 +12,11 @@ function App() {
   return (
     <>
       <Navbar />
-      <Hero />
-      <Gallery />
-      <Shop />
-      <About />
-      <Contact />
+      <Routes>
+        <Route path="/" element={<><Hero /><Gallery /><About /></>} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
       <Footer />
     </>
   )
