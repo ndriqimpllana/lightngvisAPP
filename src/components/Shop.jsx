@@ -35,128 +35,51 @@ const PRODUCTS = [
 
 /* ─── Print sizes ─────────────────────────────────────────────── */
 const PRINT_SIZES = [
-  { id: '8x10',  label: '8 × 10"',  size: '8 × 10 in',  basePrice: 38,  aspect: 8  / 10  },
-  { id: '11x14', label: '11 × 14"', size: '11 × 14 in', basePrice: 58,  aspect: 11 / 14  },
-  { id: '16x20', label: '16 × 20"', size: '16 × 20 in', basePrice: 88,  aspect: 16 / 20  },
-  { id: '20x24', label: '20 × 24"', size: '20 × 24 in', basePrice: 128, aspect: 20 / 24  },
-  { id: '24x30', label: '24 × 30"', size: '24 × 30 in', basePrice: 168, aspect: 24 / 30  },
-  { id: '30x40', label: '30 × 40"', size: '30 × 40 in', basePrice: 240, aspect: 30 / 40  },
+  { id: '8x10',  label: '8 × 10"',  basePrice: 38  },
+  { id: '11x14', label: '11 × 14"', basePrice: 58  },
+  { id: '16x20', label: '16 × 20"', basePrice: 88  },
+  { id: '20x24', label: '20 × 24"', basePrice: 128 },
+  { id: '24x30', label: '24 × 30"', basePrice: 168 },
+  { id: '30x40', label: '30 × 40"', basePrice: 240 },
 ]
 
 /* ─── Materials ───────────────────────────────────────────────── */
 const MATERIALS = [
-  {
-    id: 'fine-art',
-    label: 'Fine Paper',
-    description: 'Archival 310gsm matte · museum-quality',
-    mult: 1.0,
-  },
-  {
-    id: 'luster',
-    label: 'Luster Paper',
-    description: 'Satin smooth finish · minimal glare',
-    mult: 1.15,
-  },
-  {
-    id: 'canvas',
-    label: 'Canvas',
-    description: 'Stretched gallery-wrap · 1.5″ deep',
-    mult: 1.65,
-  },
+  { id: 'fine-art', label: 'Fine Paper',   description: 'Archival 310gsm matte · museum-quality', mult: 1.0  },
+  { id: 'luster',   label: 'Luster Paper', description: 'Satin smooth finish · minimal glare',     mult: 1.15 },
+  { id: 'canvas',   label: 'Canvas',       description: 'Stretched gallery-wrap · 1.5″ deep',      mult: 1.65 },
 ]
 
 /* ─── Frames ──────────────────────────────────────────────────── */
 const FRAMES = [
-  {
-    id: 'none',
-    label: 'No Frame',
-    priceAdd: 0,
-    thick: 0,
-    swatchDashed: true,
-  },
-  {
-    id: 'classic-black',
-    label: 'Classic Black',
-    priceAdd: 45,
-    thick: 22,
-    swatch: '#1c1c1c',
-    bg: 'linear-gradient(145deg, #2c2c2c 0%, #101010 35%, #2a2a2a 65%, #080808 100%)',
-    inset: 'inset 0 0 0 2px rgba(255,255,255,0.07), inset 0 0 0 4px rgba(0,0,0,0.55)',
-  },
-  {
-    id: 'classic-white',
-    label: 'Classic White',
-    priceAdd: 45,
-    thick: 22,
-    swatch: '#f2f2f2',
-    swatchBorder: '#d0d0d0',
-    bg: 'linear-gradient(145deg, #ffffff 0%, #e8e8e8 35%, #f8f8f8 65%, #dcdcdc 100%)',
-    inset: 'inset 0 0 0 2px rgba(0,0,0,0.07), inset 0 0 0 4px rgba(0,0,0,0.03)',
-  },
-  {
-    id: 'thin-black',
-    label: 'Thin Black',
-    priceAdd: 35,
-    thick: 8,
-    swatch: '#1c1c1c',
-    bg: 'linear-gradient(145deg, #2c2c2c 0%, #101010 35%, #2a2a2a 65%, #080808 100%)',
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.07)',
-  },
-  {
-    id: 'thin-white',
-    label: 'Thin White',
-    priceAdd: 35,
-    thick: 8,
-    swatch: '#f2f2f2',
-    swatchBorder: '#d0d0d0',
-    bg: 'linear-gradient(145deg, #ffffff 0%, #e8e8e8 35%, #f8f8f8 65%, #dcdcdc 100%)',
-    inset: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
-  },
-  {
-    id: 'wood',
-    label: 'Wood',
-    priceAdd: 65,
-    thick: 20,
-    swatch: '#b8875a',
-    bg: [
-      'repeating-linear-gradient(91deg, transparent 0px, transparent 4px, rgba(0,0,0,0.04) 4px, rgba(0,0,0,0.04) 5px, transparent 5px, transparent 11px, rgba(255,255,255,0.06) 11px, rgba(255,255,255,0.06) 12px)',
-      'linear-gradient(140deg, #d4a87a 0%, #a06838 18%, #e0b48a 36%, #986030 54%, #cc9a70 72%, #a27040 90%, #b88860 100%)',
-    ].join(', '),
-    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.18)',
-  },
-  {
-    id: 'thin-silver',
-    label: 'Thin Silver',
-    priceAdd: 55,
-    thick: 8,
-    swatch: '#b8bcc4',
-    bg: 'linear-gradient(145deg, #eceef4 0%, #8890a8 12%, #d8dce8 24%, #6878a0 36%, #c8ccd8 50%, #8090b0 62%, #d0d4e0 76%, #9098b8 88%, #e0e4ee 100%)',
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.7)',
-  },
-  {
-    id: 'dark-walnut-classic',
-    label: 'Walnut Classic',
-    priceAdd: 75,
-    thick: 22,
-    swatch: '#3d2b1f',
-    bg: [
-      'repeating-linear-gradient(90deg, transparent 0px, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px, transparent 6px, transparent 14px)',
-      'linear-gradient(140deg, #4e3528 0%, #2a1810 28%, #5a3e2a 54%, #241408 78%, #3e2818 100%)',
-    ].join(', '),
-    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.06)',
-  },
-  {
-    id: 'dark-walnut-thin',
-    label: 'Walnut Thin',
-    priceAdd: 65,
-    thick: 10,
-    swatch: '#3d2b1f',
-    bg: [
-      'repeating-linear-gradient(90deg, transparent 0px, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px, transparent 6px, transparent 14px)',
-      'linear-gradient(140deg, #4e3528 0%, #2a1810 28%, #5a3e2a 54%, #241408 78%, #3e2818 100%)',
-    ].join(', '),
-    inset: 'inset 0 0 0 1px rgba(255,255,255,0.06)',
-  },
+  { id: 'none',              label: 'No Frame',      priceAdd: 0,  thick: 0,  swatchDashed: true },
+  { id: 'classic-black',     label: 'Classic Black', priceAdd: 45, thick: 22, swatch: '#1c1c1c',
+    bg: 'linear-gradient(145deg,#2c2c2c 0%,#101010 35%,#2a2a2a 65%,#080808 100%)',
+    inset: 'inset 0 0 0 2px rgba(255,255,255,0.07),inset 0 0 0 4px rgba(0,0,0,0.55)' },
+  { id: 'classic-white',     label: 'Classic White', priceAdd: 45, thick: 22, swatch: '#f2f2f2', swatchBorder: '#d0d0d0',
+    bg: 'linear-gradient(145deg,#ffffff 0%,#e8e8e8 35%,#f8f8f8 65%,#dcdcdc 100%)',
+    inset: 'inset 0 0 0 2px rgba(0,0,0,0.07),inset 0 0 0 4px rgba(0,0,0,0.03)' },
+  { id: 'thin-black',        label: 'Thin Black',    priceAdd: 35, thick: 8,  swatch: '#1c1c1c',
+    bg: 'linear-gradient(145deg,#2c2c2c 0%,#101010 35%,#2a2a2a 65%,#080808 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.07)' },
+  { id: 'thin-white',        label: 'Thin White',    priceAdd: 35, thick: 8,  swatch: '#f2f2f2', swatchBorder: '#d0d0d0',
+    bg: 'linear-gradient(145deg,#ffffff 0%,#e8e8e8 35%,#f8f8f8 65%,#dcdcdc 100%)',
+    inset: 'inset 0 0 0 1px rgba(0,0,0,0.07)' },
+  { id: 'wood',              label: 'Wood',           priceAdd: 65, thick: 20, swatch: '#b8875a',
+    bg: ['repeating-linear-gradient(91deg,transparent 0px,transparent 4px,rgba(0,0,0,0.04) 4px,rgba(0,0,0,0.04) 5px,transparent 5px,transparent 11px,rgba(255,255,255,0.06) 11px,rgba(255,255,255,0.06) 12px)',
+         'linear-gradient(140deg,#d4a87a 0%,#a06838 18%,#e0b48a 36%,#986030 54%,#cc9a70 72%,#a27040 90%,#b88860 100%)'].join(', '),
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.18)' },
+  { id: 'thin-silver',       label: 'Thin Silver',   priceAdd: 55, thick: 8,  swatch: '#b8bcc4',
+    bg: 'linear-gradient(145deg,#eceef4 0%,#8890a8 12%,#d8dce8 24%,#6878a0 36%,#c8ccd8 50%,#8090b0 62%,#d0d4e0 76%,#9098b8 88%,#e0e4ee 100%)',
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.7)' },
+  { id: 'dark-walnut-classic', label: 'Walnut Classic', priceAdd: 75, thick: 22, swatch: '#3d2b1f',
+    bg: ['repeating-linear-gradient(90deg,transparent 0px,transparent 5px,rgba(0,0,0,0.06) 5px,rgba(0,0,0,0.06) 6px,transparent 6px,transparent 14px)',
+         'linear-gradient(140deg,#4e3528 0%,#2a1810 28%,#5a3e2a 54%,#241408 78%,#3e2818 100%)'].join(', '),
+    inset: 'inset 0 0 0 1.5px rgba(255,255,255,0.06)' },
+  { id: 'dark-walnut-thin',  label: 'Walnut Thin',   priceAdd: 65, thick: 10, swatch: '#3d2b1f',
+    bg: ['repeating-linear-gradient(90deg,transparent 0px,transparent 5px,rgba(0,0,0,0.06) 5px,rgba(0,0,0,0.06) 6px,transparent 6px,transparent 14px)',
+         'linear-gradient(140deg,#4e3528 0%,#2a1810 28%,#5a3e2a 54%,#241408 78%,#3e2818 100%)'].join(', '),
+    inset: 'inset 0 0 0 1px rgba(255,255,255,0.06)' },
 ]
 
 /* ─── Mat boards ──────────────────────────────────────────────── */
@@ -164,26 +87,17 @@ const MATS = [
   { id: 'none',  label: 'No Mat', priceAdd: 0,  color: null,      dashed: true },
   { id: 'white', label: 'White',  priceAdd: 20, color: '#f7f7f7', border: '#ddd' },
   { id: 'cream', label: 'Cream',  priceAdd: 20, color: '#f3ede0', border: '#d8cdb4' },
-  { id: 'black', label: 'Black',  priceAdd: 20, color: '#181818'  },
-  { id: 'gray',  label: 'Gray',   priceAdd: 20, color: '#8a8a8a'  },
+  { id: 'black', label: 'Black',  priceAdd: 20, color: '#181818' },
+  { id: 'gray',  label: 'Gray',   priceAdd: 20, color: '#8a8a8a' },
 ]
 
-/* ─── Price calculator ────────────────────────────────────────── */
-function calcPrice(size, material, frame, mat) {
-  return Math.round(size.basePrice * material.mult + frame.priceAdd + mat.priceAdd)
-}
-
-/* ─── Size map — pixels relative to room scene ────────────────── */
+/* ─── Size map for room preview ───────────────────────────────── */
 const SIZE_MAP = {
-  '8x10':  100,
-  '11x14': 145,
-  '16x20': 198,
-  '20x24': 234,
-  '24x30': 275,
-  '30x40': 330,
+  '8x10': 100, '11x14': 145, '16x20': 198,
+  '20x24': 234, '24x30': 275, '30x40': 330,
 }
 
-/* ─── Frame Preview Component ─────────────────────────────────── */
+/* ─── Frame Preview (in customizer) ──────────────────────────── */
 function FramePreview({ photo, size, frame, mat }) {
   const [naturalRatio, setNaturalRatio] = useState(null)
 
@@ -195,52 +109,30 @@ function FramePreview({ photo, size, frame, mat }) {
 
   const maxDim = SIZE_MAP[size.id] || 180
   const imageRatio = naturalRatio || (2 / 3)
-
   let PHOTO_W, PHOTO_H
-  if (imageRatio >= 1) {
-    PHOTO_W = maxDim
-    PHOTO_H = Math.round(maxDim / imageRatio)
-  } else {
-    PHOTO_H = maxDim
-    PHOTO_W = Math.round(maxDim * imageRatio)
-  }
+  if (imageRatio >= 1) { PHOTO_W = maxDim; PHOTO_H = Math.round(maxDim / imageRatio) }
+  else                  { PHOTO_H = maxDim; PHOTO_W = Math.round(maxDim * imageRatio) }
 
-  const outerShadow = '0 40px 120px rgba(0,0,0,0.65), 0 16px 48px rgba(0,0,0,0.35), 2px 4px 0 rgba(255,255,255,0.04)'
-
+  const outerShadow = '0 40px 120px rgba(0,0,0,0.65),0 16px 48px rgba(0,0,0,0.35),2px 4px 0 rgba(255,255,255,0.04)'
   const frameStyle = frame.id !== 'none'
-    ? {
-        padding: `${frame.thick}px`,
-        background: frame.bg,
-        boxShadow: frame.inset ? `${frame.inset}, ${outerShadow}` : outerShadow,
-        transition: 'all 0.35s ease',
-      }
+    ? { padding: `${frame.thick}px`, background: frame.bg,
+        boxShadow: frame.inset ? `${frame.inset},${outerShadow}` : outerShadow, transition: 'all 0.35s ease' }
     : { boxShadow: outerShadow, transition: 'all 0.35s ease' }
-
-  const matStyle = mat.id !== 'none'
-    ? { padding: '20px', background: mat.color, transition: 'all 0.35s ease' }
-    : {}
+  const matStyle = mat.id !== 'none' ? { padding: '20px', background: mat.color, transition: 'all 0.35s ease' } : {}
 
   const photoEl = (
-    <img
-      src={photo.src}
-      alt={photo.title}
-      style={{
-        display: 'block',
-        width: `${PHOTO_W}px`,
-        height: `${PHOTO_H}px`,
-        objectFit: 'cover',
-        transition: 'width 0.35s ease, height 0.35s ease',
-      }}
-    />
+    <img src={photo.src} alt={photo.title}
+      style={{ display: 'block', width: `${PHOTO_W}px`, height: `${PHOTO_H}px`,
+               objectFit: 'cover', transition: 'width 0.35s ease,height 0.35s ease' }} />
   )
 
   const frameThick = frame.thick || 0
-  const matExtra = mat.id !== 'none' ? 40 : 0
-  const shadowW = PHOTO_W + (frameThick + matExtra / 2) * 2 + 20
+  const matExtra   = mat.id !== 'none' ? 40 : 0
+  const shadowW    = PHOTO_W + (frameThick + matExtra / 2) * 2 + 20
 
   const caption = [
     frame.id !== 'none' && frame.label,
-    mat.id !== 'none' && mat.label,
+    mat.id   !== 'none' && mat.label,
     size.label,
   ].filter(Boolean).join(' · ')
 
@@ -256,7 +148,7 @@ function FramePreview({ photo, size, frame, mat }) {
   )
 }
 
-/* ─── Customizer Modal ────────────────────────────────────────── */
+/* ─── Customizer Modal (full: frame + mat + size + paper) ─────── */
 function CustomizerModal({ product, onClose, onAddToCart }) {
   const { t } = useTranslation()
   const [size,     setSize    ] = useState(PRINT_SIZES[1])
@@ -264,7 +156,7 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
   const [frame,    setFrame   ] = useState(FRAMES[1])
   const [mat,      setMat     ] = useState(MATS[1])
 
-  const price = calcPrice(size, material, frame, mat)
+  const price = Math.round(size.basePrice * material.mult + frame.priceAdd + mat.priceAdd)
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -277,24 +169,8 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
     return () => window.removeEventListener('keydown', handler)
   }, [onClose])
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) onClose()
-  }
-
-  const handleAddToCart = () => {
-    onAddToCart({
-      title:    product.title,
-      src:      product.src,
-      size:     size.label,
-      material: material.label,
-      frame:    frame.label,
-      mat:      mat.label,
-      price,
-    })
-  }
-
   return (
-    <div className="cm-overlay" onClick={handleOverlayClick}>
+    <div className="cm-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
       <div className="cm-modal" role="dialog" aria-modal="true">
 
         <button className="cm-close" onClick={onClose} aria-label="Close">
@@ -304,15 +180,13 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
         </button>
 
         <div className="cm-layout">
-
-          {/* ── LEFT: live frame preview in room ── */}
+          {/* LEFT: room preview */}
           <div className="cm-preview-pane">
             <FramePreview photo={product} size={size} frame={frame} mat={mat} />
           </div>
 
-          {/* ── RIGHT: options ── */}
+          {/* RIGHT: options */}
           <div className="cm-options-pane">
-
             <div className="cm-header">
               <h2 className="cm-title">{product.title}</h2>
               <span className="cm-meta">{product.category} Photography</span>
@@ -321,18 +195,14 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
 
             <div className="cm-divider" />
 
-            {/* Print Size */}
+            {/* Size */}
             <div className="opt-group">
               <div className="opt-label">{t('shop.size')}</div>
               <div className="opt-pills">
                 {PRINT_SIZES.map(s => (
-                  <button
-                    key={s.id}
+                  <button key={s.id}
                     className={`opt-pill ${size.id === s.id ? 'opt-pill--on' : ''}`}
-                    onClick={() => setSize(s)}
-                  >
-                    {s.label}
-                  </button>
+                    onClick={() => setSize(s)}>{s.label}</button>
                 ))}
               </div>
             </div>
@@ -342,11 +212,9 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
               <div className="opt-label">{t('shop.material')}</div>
               <div className="mat-list">
                 {MATERIALS.map(m => (
-                  <button
-                    key={m.id}
+                  <button key={m.id}
                     className={`mat-item ${material.id === m.id ? 'mat-item--on' : ''}`}
-                    onClick={() => setMaterial(m)}
-                  >
+                    onClick={() => setMaterial(m)}>
                     <span className="mat-item__name">{m.label}</span>
                     <span className="mat-item__desc">{m.description}</span>
                   </button>
@@ -356,63 +224,38 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
 
             {/* Frame */}
             <div className="opt-group">
-              <div className="opt-label">
-                {t('shop.frame')}
-                {frame.priceAdd > 0 && (
-                  <span className="opt-add">+${frame.priceAdd}</span>
-                )}
-              </div>
+              <div className="opt-label">{t('shop.frame')}</div>
               <div className="sw-grid">
                 {FRAMES.map(f => (
-                  <button
-                    key={f.id}
+                  <button key={f.id}
                     className={`sw-btn ${frame.id === f.id ? 'sw-btn--on' : ''}`}
-                    onClick={() => setFrame(f)}
-                    title={f.label}
-                  >
-                    <span
-                      className="sw-dot"
-                      style={
-                        f.swatchDashed
-                          ? { background: 'transparent', border: '2px dashed #bbb' }
-                          : {
-                              background: f.bg || f.swatch,
-                              border: f.swatchBorder ? `1px solid ${f.swatchBorder}` : 'none',
-                            }
-                      }
+                    onClick={() => setFrame(f)} title={f.label}>
+                    <span className="sw-dot"
+                      style={f.swatchDashed
+                        ? { background: 'transparent', border: '2px dashed #bbb' }
+                        : { background: f.bg || f.swatch, border: f.swatchBorder ? `1px solid ${f.swatchBorder}` : 'none' }}
                     />
                     <span className="sw-name">{f.label}</span>
+                    <span className="sw-price-tag">
+                      {f.priceAdd > 0 ? `+$${f.priceAdd}` : 'Free'}
+                    </span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Mat board */}
+            {/* Mat */}
             <div className="opt-group">
-              <div className="opt-label">
-                {t('shop.mat')}
-                {mat.priceAdd > 0 && (
-                  <span className="opt-add">+${mat.priceAdd}</span>
-                )}
-              </div>
+              <div className="opt-label">{t('shop.mat')}</div>
               <div className="mat-swatches">
                 {MATS.map(m => (
-                  <button
-                    key={m.id}
+                  <button key={m.id}
                     className={`msw-btn ${mat.id === m.id ? 'msw-btn--on' : ''}`}
-                    onClick={() => setMat(m)}
-                    title={m.label}
-                  >
-                    <span
-                      className="msw-dot"
-                      style={
-                        m.dashed
-                          ? { background: 'transparent', border: '2px dashed #bbb' }
-                          : {
-                              background: m.color,
-                              border: m.border ? `1px solid ${m.border}` : 'none',
-                            }
-                      }
+                    onClick={() => setMat(m)} title={m.label}>
+                    <span className="msw-dot"
+                      style={m.dashed
+                        ? { background: 'transparent', border: '2px dashed #bbb' }
+                        : { background: m.color, border: m.border ? `1px solid ${m.border}` : 'none' }}
                     />
                     <span className="msw-name">{m.label}</span>
                   </button>
@@ -426,12 +269,15 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
                 <span className="cm-price-label">{t('shop.total')}</span>
                 <span className="cm-price-amount">${price}</span>
               </div>
-              <button className="btn cm-add-btn" onClick={handleAddToCart}>
+              <button className="btn cm-add-btn" onClick={() => {
+                onAddToCart({ title: product.title, src: product.src,
+                  size: size.label, material: material.label,
+                  frame: frame.label, mat: mat.label, price })
+              }}>
                 {t('shop.addToCart')}
               </button>
               <p className="cm-note">{t('shop.note')}</p>
             </div>
-
           </div>
         </div>
       </div>
@@ -455,26 +301,79 @@ function CartToast({ item, onDismiss }) {
   )
 }
 
-/* ─── Product Card ────────────────────────────────────────────── */
-function ProductCard({ product, onSelect }) {
+/* ─── Product Card ─────────────────────────────────────────────── */
+function ProductCard({ product, onAddToCart, onCustomize }) {
   const { t } = useTranslation()
+  const [size,     setSize    ] = useState(PRINT_SIZES[1])
+  const [material, setMaterial] = useState(MATERIALS[0])
+
+  const price = Math.round(size.basePrice * material.mult)
+
+  const handleOrder = () => {
+    onAddToCart({
+      title:    product.title,
+      src:      product.src,
+      size:     size.label,
+      material: material.label,
+      frame:    'No Frame',
+      mat:      'No Mat',
+      price,
+    })
+  }
+
   return (
-    <article className="sc-card" onClick={() => onSelect(product)}>
+    <article className="sc-card">
+      {/* Full image — natural orientation */}
       <div className="sc-img-wrap">
         <img src={product.src} alt={product.title} loading="lazy" className="sc-img" />
-        <div className="sc-overlay">
-          <span className="sc-cta-btn">{t('shop.customize')}</span>
-        </div>
       </div>
-      <div className="sc-info">
-        <div>
+
+      <div className="sc-body">
+        <div className="sc-header">
           <h3 className="sc-title">{product.title}</h3>
-          <p className="sc-edition">{t('shop.edition')} {product.edition}</p>
+          <span className="sc-edition">{t('shop.limitedEdition')} {product.edition}</span>
         </div>
-        <p className="sc-from">
-          <span className="sc-from-label">{t('shop.from')}</span>
-          <span className="sc-from-price">${PRINT_SIZES[0].basePrice}</span>
-        </p>
+
+        {/* Size selection */}
+        <div className="sc-opt-group">
+          <p className="sc-opt-label">{t('shop.size')}</p>
+          <div className="sc-pills">
+            {PRINT_SIZES.map(s => (
+              <button key={s.id}
+                className={`sc-pill ${size.id === s.id ? 'sc-pill--on' : ''}`}
+                onClick={() => setSize(s)}>
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Paper type */}
+        <div className="sc-opt-group">
+          <p className="sc-opt-label">{t('shop.material')}</p>
+          <div className="sc-pills">
+            {MATERIALS.map(m => (
+              <button key={m.id}
+                className={`sc-pill ${material.id === m.id ? 'sc-pill--on' : ''}`}
+                onClick={() => setMaterial(m)}>
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Price + Order */}
+        <div className="sc-footer">
+          <span className="sc-price">${price}</span>
+          <button className="btn sc-order-btn" onClick={handleOrder}>
+            Order
+          </button>
+        </div>
+
+        {/* Customize link */}
+        <button className="sc-customize-link" onClick={() => onCustomize(product)}>
+          Customize &amp; Add Frame →
+        </button>
       </div>
     </article>
   )
@@ -483,8 +382,8 @@ function ProductCard({ product, onSelect }) {
 /* ─── Main Shop Section ───────────────────────────────────────── */
 function Shop() {
   const { t } = useTranslation()
-  const [selected, setSelected ] = useState(null)
-  const [toast,    setToast    ] = useState(null)
+  const [selected, setSelected] = useState(null)
+  const [toast,    setToast   ] = useState(null)
 
   const handleAddToCart = useCallback((item) => {
     setSelected(null)
@@ -508,7 +407,12 @@ function Shop() {
 
       <div className="shop__grid">
         {PRODUCTS.map(p => (
-          <ProductCard key={p.id} product={p} onSelect={setSelected} />
+          <ProductCard
+            key={p.id}
+            product={p}
+            onAddToCart={handleAddToCart}
+            onCustomize={setSelected}
+          />
         ))}
       </div>
 
