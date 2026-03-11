@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useCart } from '../context/CartContext'
 import './Navbar.css'
 
 const LANGUAGES = [
@@ -52,6 +53,7 @@ function Navbar() {
     }
   }
 
+  const { totalCount, setIsOpen: openCart } = useCart()
   const currentLang = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0]
 
   return (
@@ -78,6 +80,16 @@ function Navbar() {
             <li><button className="navbar__section-link" onClick={() => handleSectionLink('about')}>{t('nav.about')}</button></li>
             <li><Link to="/contact" onClick={handleNavClick}>{t('nav.contact')}</Link></li>
           </ul>
+
+          {/* Cart button */}
+          <button className="navbar__cart" onClick={() => openCart(true)} aria-label="Open cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            {totalCount > 0 && <span className="navbar__cart-badge">{totalCount}</span>}
+          </button>
 
           {/* Language dropdown */}
           <div className="lang-dropdown" ref={langRef}>

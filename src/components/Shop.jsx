@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useCart } from '../context/CartContext'
 import './Shop.css'
 
 import img1  from '../assets/img/ANDY4354.jpg'
@@ -285,32 +286,17 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
   )
 }
 
-/* ─── Cart Toast ──────────────────────────────────────────────── */
-function CartToast({ item, onDismiss }) {
-  return (
-    <div className="cart-toast">
-      <div className="ct-check">✓</div>
-      <div className="ct-info">
-        <strong>{item.title}</strong>
-        <span>{item.size} · {item.material}</span>
-        <span>{item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}</span>
-      </div>
-      <div className="ct-price">${item.price}</div>
-      <button className="ct-close" onClick={onDismiss} aria-label="Dismiss">×</button>
-    </div>
-  )
-}
-
 /* ─── Product Card ─────────────────────────────────────────────── */
-function ProductCard({ product, onAddToCart, onCustomize }) {
+function ProductCard({ product, onCustomize }) {
   const { t } = useTranslation()
+  const { addItem } = useCart()
   const [size,     setSize    ] = useState(PRINT_SIZES[1])
   const [material, setMaterial] = useState(MATERIALS[0])
 
   const price = Math.round(size.basePrice * material.mult)
 
   const handleOrder = () => {
-    onAddToCart({
+    addItem({
       title:    product.title,
       src:      product.src,
       size:     size.label,
@@ -382,15 +368,13 @@ function ProductCard({ product, onAddToCart, onCustomize }) {
 /* ─── Main Shop Section ───────────────────────────────────────── */
 function Shop() {
   const { t } = useTranslation()
+  const { addItem } = useCart()
   const [selected, setSelected] = useState(null)
-  const [toast,    setToast   ] = useState(null)
 
-  const handleAddToCart = useCallback((item) => {
+  const handleAddToCart = (item) => {
+    addItem(item)
     setSelected(null)
-    setToast(item)
-    const id = setTimeout(() => setToast(null), 4500)
-    return () => clearTimeout(id)
-  }, [])
+  }
 
   return (
     <section id="shop" className="shop section">
@@ -410,7 +394,6 @@ function Shop() {
           <ProductCard
             key={p.id}
             product={p}
-            onAddToCart={handleAddToCart}
             onCustomize={setSelected}
           />
         ))}
@@ -423,8 +406,6 @@ function Shop() {
           onAddToCart={handleAddToCart}
         />
       )}
-
-      {toast && <CartToast item={toast} onDismiss={() => setToast(null)} />}
     </section>
   )
 }
