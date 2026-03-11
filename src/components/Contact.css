@@ -53,9 +53,32 @@
   color: var(--gray-400);
 }
 
+.contact__footer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
 .contact__form .btn {
   align-self: flex-start;
 }
+
+.contact__form .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact__feedback {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  margin: 0;
+  max-width: none;
+}
+
+.contact__feedback--ok  { color: #2d7a2d; }
+.contact__feedback--err { color: #b03030; }
 
 @media (max-width: 480px) {
   .contact__row {
