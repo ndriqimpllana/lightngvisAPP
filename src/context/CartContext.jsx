@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 // Initialize Stripe with your Publishable Key
 // Replace 'pk_test_...' with your actual key from the Stripe Dashboard
-const stripePromise = loadStripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const CartContext = createContext();
 
