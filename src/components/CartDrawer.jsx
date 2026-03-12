@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import './CartDrawer.css'
 
 export default function CartDrawer() {
   const { items, removeItem, updateQty, totalPrice, isOpen, setIsOpen } = useCart()
+  const navigate = useNavigate()
 
   // Lock body scroll while open
   useEffect(() => {
@@ -18,19 +20,9 @@ export default function CartDrawer() {
     return () => window.removeEventListener('keydown', handler)
   }, [setIsOpen])
 
-  const handleCheckout = async () => {
-    try {
-      const res = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
-      })
-      const data = await res.json()
-      if (data.url) window.location.href = data.url
-      else alert('Checkout unavailable. Please try again.')
-    } catch {
-      alert('Checkout unavailable. Please try again.')
-    }
+  const handleCheckout = () => {
+    setIsOpen(false)
+    navigate('/checkout')
   }
 
   return (

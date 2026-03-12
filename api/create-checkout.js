@@ -29,12 +29,14 @@ module.exports = async (req, res) => {
     quantity: item.qty,
   }))
 
+  const origin = req.headers.origin || `http://localhost:${process.env.PORT || 5173}`
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: lineItems,
     mode: 'payment',
-    success_url: `${req.headers.origin}/shop?order=success`,
-    cancel_url:  `${req.headers.origin}/shop`,
+    success_url: `${origin}/shop?order=success`,
+    cancel_url:  `${origin}/shop`,
     shipping_address_collection: { allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'AL'] },
   })
 

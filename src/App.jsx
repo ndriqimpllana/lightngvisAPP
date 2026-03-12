@@ -10,6 +10,7 @@ import About from './components/About'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CartDrawer from './components/CartDrawer'
+import Checkout from './components/Checkout'
 import { Toaster } from 'sonner'
 
 function ShopWithSuccess() {
@@ -45,6 +46,7 @@ function App() {
         <Route path="/" element={<><Hero /><Gallery /><About /></>} />
         <Route path="/shop" element={<ShopWithSuccess />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <Footer />
     </CartProvider>
