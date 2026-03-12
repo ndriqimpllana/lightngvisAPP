@@ -93,10 +93,7 @@ export default function CartDrawer() {
               <button className="btn cart-drawer__checkout" onClick={handleCheckout}>
                 Proceed to Checkout
               </button>
-              <button
-                className="cart-drawer__clear"
-                onClick={() => { if (window.confirm('Remove all items from your cart?')) clearCart() }}
-              >
+              <button className="cart-drawer__clear" onClick={clearCart}>
                 Empty cart
               </button>
               <p className="cart-drawer__secure">Secure payment via Stripe</p>

@@ -394,7 +394,7 @@ export default function Checkout() {
             <p className="co-label">Order summary · {totalCount} {totalCount === 1 ? 'item' : 'items'}</p>
             <button
               className="co-clear-btn"
-              onClick={() => { if (window.confirm('Remove all items from your cart?')) clearCart() }}
+              onClick={clearCart}
             >
               Empty cart
             </button>
