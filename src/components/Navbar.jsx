@@ -25,15 +25,15 @@ function Navbar() {
 
   const handleSectionLink = (sectionId) => {
     setMenuOpen(false)
-    const scrollToSection = () => {
-      const el = document.getElementById(sectionId)
-      if (el) el.scrollIntoView({ behavior: 'smooth' })
-    }
     if (window.location.pathname !== '/') {
       navigate('/')
-      setTimeout(scrollToSection, 100)
+      setTimeout(() => {
+        const el = document.getElementById(sectionId)
+        if (el) el.scrollIntoView({ behavior: 'instant' })
+      }, 50)
     } else {
-      scrollToSection()
+      const el = document.getElementById(sectionId)
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
