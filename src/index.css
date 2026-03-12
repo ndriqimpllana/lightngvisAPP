@@ -17,6 +17,7 @@
   --gray-800: #262626;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-numbers: 'Playfair Display', Georgia, serif;
   --transition: 0.3s ease;
 }
 
@@ -34,17 +35,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Keep digits in Roboto — unicode-range override for 0-9 */
-@font-face {
-  font-family: 'Cormorant Garamond';
-  src: local('Roboto'), local('Roboto-Regular');
-  unicode-range: U+0030-0039, U+0024, U+20AC, U+00A3; /* digits + $, €, £ */
-}
-
-/* Explicit sans-serif for price/number elements */
-.price, .num {
-  font-family: var(--font-sans);
-}
+/* Numbers use Playfair Display — applied per element in component CSS */
 
 a {
   color: inherit;

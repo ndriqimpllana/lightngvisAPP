@@ -400,8 +400,8 @@
 }
 
 .co-item__price {
-  font-size: 0.9rem;
-  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-family: var(--font-numbers);
   color: var(--black);
   font-weight: 400;
   white-space: nowrap;
@@ -435,6 +435,13 @@
   letter-spacing: 0.06em;
 }
 
+.co-totals__row span:last-child {
+  font-family: var(--font-numbers);
+  font-size: 0.88rem;
+  color: var(--black);
+  letter-spacing: 0.02em;
+}
+
 .co-totals__row--total {
   font-size: 1.1rem;
   color: var(--black);
@@ -442,6 +449,12 @@
   padding-top: 0.75rem;
   margin-top: 0.2rem;
   border-top: 1px solid var(--gray-200);
+}
+
+.co-totals__row--total span:last-child {
+  font-family: var(--font-numbers);
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 /* ── Empty state ─────────────────────────────────────────────── */

@@ -191,10 +191,18 @@ function OrderModal({ product, onClose, onAddToCart }) {
         <div className="cm-layout">
 
           {/* LEFT: plain photo or room preview */}
-          <div className={`cm-preview-pane${mode === 'basic' ? ' cm-preview-pane--plain' : ''}`}>
+          <div
+            className={`cm-preview-pane${mode === 'basic' ? ' cm-preview-pane--plain' : ''}`}
+            onContextMenu={(e) => e.preventDefault()}
+          >
             {mode === 'customize'
               ? <FramePreview photo={product} size={size} frame={frame} mat={mat} />
-              : <img src={product.src} alt={product.title} className="cm-plain-img" />
+              : (
+                <div className="cm-plain-img-wrap">
+                  <img src={product.src} alt={product.title} className="cm-plain-img" draggable={false} />
+                  <div className="cm-img-guard" />
+                </div>
+              )
             }
           </div>
 
@@ -323,8 +331,9 @@ function ProductCard({ product, onOrder }) {
 
   return (
     <article className="sc-card" id={`product-${product.title.toLowerCase().replace(/\s+/g, '-')}`}>
-      <div className="sc-img-wrap">
-        <img src={product.src} alt={product.title} loading="lazy" className="sc-img" />
+      <div className="sc-img-wrap" onContextMenu={(e) => e.preventDefault()}>
+        <img src={product.src} alt={product.title} loading="lazy" className="sc-img" draggable={false} />
+        <div className="sc-img-guard" />
         <div className="sc-overlay">
           <button className="sc-overlay-btn" onClick={() => onOrder(product)}>
             Order
