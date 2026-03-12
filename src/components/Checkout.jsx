@@ -397,7 +397,7 @@ export default function Checkout() {
                 <img src={item.src} alt={item.title} className="co-item__img" />
                 <div className="co-item__details">
                   <div className="co-item__top-row">
-                    <span className="co-item__title">{item.title}</span>
+                    <Link to={`/shop?highlight=${encodeURIComponent(item.title)}`} className="co-item__title">{item.title}</Link>
                     <button className="co-item__remove" onClick={() => removeItem(idx)} aria-label="Remove item">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>

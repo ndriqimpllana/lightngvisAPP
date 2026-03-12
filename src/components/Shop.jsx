@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import './Shop.css'
 
@@ -308,7 +309,7 @@ function ProductCard({ product, onCustomize }) {
   }
 
   return (
-    <article className="sc-card">
+    <article className="sc-card" id={`product-${product.title.toLowerCase().replace(/\s+/g, '-')}`}>
       {/* Full image — natural orientation */}
       <div className="sc-img-wrap">
         <img src={product.src} alt={product.title} loading="lazy" className="sc-img" />
@@ -370,6 +371,21 @@ function Shop() {
   const { t } = useTranslation()
   const { addItem } = useCart()
   const [selected, setSelected] = useState(null)
+  const [searchParams] = useSearchParams()
+  const highlightRef = useRef(null)
+
+  useEffect(() => {
+    const highlight = searchParams.get('highlight')
+    if (!highlight) return
+    const id = `product-${highlight.toLowerCase().replace(/\s+/g, '-')}`
+    const el = document.getElementById(id)
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    el.classList.add('sc-card--highlight')
+    highlightRef.current = setTimeout(() => el.classList.remove('sc-card--highlight'), 1800)
+  }, [searchParams])
+
+  useEffect(() => () => clearTimeout(highlightRef.current), [])
 
   const handleAddToCart = (item) => {
     addItem(item)

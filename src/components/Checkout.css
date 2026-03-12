@@ -338,6 +338,11 @@
   font-weight: 400;
   color: var(--black);
   line-height: 1.3;
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+.co-item__title:hover {
+  opacity: 0.55;
 }
 
 .co-item__remove {
