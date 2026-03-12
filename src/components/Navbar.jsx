@@ -1,38 +1,18 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCart } from '../context/CartContext'
 import './Navbar.css'
 
-const LANGUAGES = [
-  { code: 'en', label: 'English', short: 'EN' },
-  { code: 'sq', label: 'Shqip', short: 'SQ' },
-  { code: 'es', label: 'Espa\u00f1ol', short: 'ES' },
-  { code: 'ar', label: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629', short: 'AR' },
-]
-
 function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [langOpen, setLangOpen] = useState(false)
-  const langRef = useRef(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (langRef.current && !langRef.current.contains(e.target)) {
-        setLangOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   const navigate = useNavigate()
@@ -54,7 +34,6 @@ function Navbar() {
   }
 
   const { totalCount, setIsOpen: openCart } = useCart()
-  const currentLang = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0]
 
   return (
     <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
@@ -81,7 +60,6 @@ function Navbar() {
             <li><Link to="/contact" onClick={handleNavClick}>{t('nav.contact')}</Link></li>
           </ul>
 
-          {/* Cart button */}
           <button className="navbar__cart" onClick={() => openCart(true)} aria-label="Open cart">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
@@ -89,36 +67,6 @@ function Navbar() {
             </svg>
             {totalCount > 0 && <span className="navbar__cart-badge">{totalCount}</span>}
           </button>
-
-          {/* Language dropdown */}
-          <div className="lang-dropdown" ref={langRef}>
-            <button
-              className="lang-dropdown__trigger"
-              onClick={() => setLangOpen(!langOpen)}
-              aria-label="Select language"
-            >
-              {currentLang.short}
-              <svg className={`lang-dropdown__arrow ${langOpen ? 'lang-dropdown__arrow--open' : ''}`} width="10" height="6" viewBox="0 0 10 6" fill="none">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.2" />
-              </svg>
-            </button>
-
-            {langOpen && (
-              <ul className="lang-dropdown__menu">
-                {LANGUAGES.map((lang) => (
-                  <li key={lang.code}>
-                    <button
-                      className={`lang-dropdown__item ${i18n.language === lang.code ? 'lang-dropdown__item--active' : ''}`}
-                      onClick={() => { i18n.changeLanguage(lang.code); setLangOpen(false) }}
-                    >
-                      <span className="lang-dropdown__short">{lang.short}</span>
-                      <span className="lang-dropdown__label">{lang.label}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
         </div>
       </div>
     </nav>
