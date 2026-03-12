@@ -99,7 +99,7 @@ const SIZE_MAP = {
   '20x24': 234, '24x30': 275, '30x40': 330,
 }
 
-/* ─── Frame Preview (in customizer) ──────────────────────────── */
+/* ─── Frame Preview (room scene) ─────────────────────────────── */
 function FramePreview({ photo, size, frame, mat }) {
   const [naturalRatio, setNaturalRatio] = useState(null)
 
@@ -150,13 +150,14 @@ function FramePreview({ photo, size, frame, mat }) {
   )
 }
 
-/* ─── Customizer Modal (full: frame + mat + size + paper) ─────── */
-function CustomizerModal({ product, onClose, onAddToCart }) {
+/* ─── Order Modal ─────────────────────────────────────────────── */
+function OrderModal({ product, onClose, onAddToCart }) {
   const { t } = useTranslation()
+  const [mode,     setMode    ] = useState('basic') // 'basic' | 'customize'
   const [size,     setSize    ] = useState(PRINT_SIZES[1])
   const [material, setMaterial] = useState(MATERIALS[0])
-  const [frame,    setFrame   ] = useState(FRAMES[1])
-  const [mat,      setMat     ] = useState(MATS[1])
+  const [frame,    setFrame   ] = useState(FRAMES[0])
+  const [mat,      setMat     ] = useState(MATS[0])
 
   const price = Math.round(size.basePrice * material.mult + frame.priceAdd + mat.priceAdd)
 
@@ -171,6 +172,12 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
     return () => window.removeEventListener('keydown', handler)
   }, [onClose])
 
+  const enterCustomize = () => {
+    setMode('customize')
+    if (frame.id === 'none') setFrame(FRAMES[1])
+    if (mat.id === 'none')   setMat(MATS[1])
+  }
+
   return (
     <div className="cm-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
       <div className="cm-modal" role="dialog" aria-modal="true">
@@ -182,9 +189,13 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
         </button>
 
         <div className="cm-layout">
-          {/* LEFT: room preview */}
-          <div className="cm-preview-pane">
-            <FramePreview photo={product} size={size} frame={frame} mat={mat} />
+
+          {/* LEFT: plain photo or room preview */}
+          <div className={`cm-preview-pane${mode === 'basic' ? ' cm-preview-pane--plain' : ''}`}>
+            {mode === 'customize'
+              ? <FramePreview photo={product} size={size} frame={frame} mat={mat} />
+              : <img src={product.src} alt={product.title} className="cm-plain-img" />
+            }
           </div>
 
           {/* RIGHT: options */}
@@ -224,46 +235,49 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
               </div>
             </div>
 
-            {/* Frame */}
-            <div className="opt-group">
-              <div className="opt-label">{t('shop.frame')}</div>
-              <div className="sw-grid">
-                {FRAMES.map(f => (
-                  <button key={f.id}
-                    className={`sw-btn ${frame.id === f.id ? 'sw-btn--on' : ''}`}
-                    onClick={() => setFrame(f)} title={f.label}>
-                    <span className="sw-dot"
-                      style={f.swatchDashed
-                        ? { background: 'transparent', border: '2px dashed #bbb' }
-                        : { background: f.bg || f.swatch, border: f.swatchBorder ? `1px solid ${f.swatchBorder}` : 'none' }}
-                    />
-                    <span className="sw-name">{f.label}</span>
-                    <span className="sw-price-tag">
-                      {f.priceAdd > 0 ? `+$${f.priceAdd}` : 'Free'}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* Frame + Mat (customize mode only) */}
+            {mode === 'customize' && (
+              <>
+                <div className="opt-group">
+                  <div className="opt-label">{t('shop.frame')}</div>
+                  <div className="sw-grid">
+                    {FRAMES.map(f => (
+                      <button key={f.id}
+                        className={`sw-btn ${frame.id === f.id ? 'sw-btn--on' : ''}`}
+                        onClick={() => setFrame(f)} title={f.label}>
+                        <span className="sw-dot"
+                          style={f.swatchDashed
+                            ? { background: 'transparent', border: '2px dashed #bbb' }
+                            : { background: f.bg || f.swatch, border: f.swatchBorder ? `1px solid ${f.swatchBorder}` : 'none' }}
+                        />
+                        <span className="sw-name">{f.label}</span>
+                        <span className="sw-price-tag">
+                          {f.priceAdd > 0 ? `+$${f.priceAdd}` : 'Free'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-            {/* Mat */}
-            <div className="opt-group">
-              <div className="opt-label">{t('shop.mat')}</div>
-              <div className="mat-swatches">
-                {MATS.map(m => (
-                  <button key={m.id}
-                    className={`msw-btn ${mat.id === m.id ? 'msw-btn--on' : ''}`}
-                    onClick={() => setMat(m)} title={m.label}>
-                    <span className="msw-dot"
-                      style={m.dashed
-                        ? { background: 'transparent', border: '2px dashed #bbb' }
-                        : { background: m.color, border: m.border ? `1px solid ${m.border}` : 'none' }}
-                    />
-                    <span className="msw-name">{m.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+                <div className="opt-group">
+                  <div className="opt-label">{t('shop.mat')}</div>
+                  <div className="mat-swatches">
+                    {MATS.map(m => (
+                      <button key={m.id}
+                        className={`msw-btn ${mat.id === m.id ? 'msw-btn--on' : ''}`}
+                        onClick={() => setMat(m)} title={m.label}>
+                        <span className="msw-dot"
+                          style={m.dashed
+                            ? { background: 'transparent', border: '2px dashed #bbb' }
+                            : { background: m.color, border: m.border ? `1px solid ${m.border}` : 'none' }}
+                        />
+                        <span className="msw-name">{m.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Price + CTA */}
             <div className="cm-cta">
@@ -272,15 +286,29 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
                 <span className="cm-price-amount">${price}</span>
               </div>
               <button className="btn cm-add-btn" onClick={() => {
-                onAddToCart({ title: product.title, src: product.src,
-                  size: size.label, material: material.label,
-                  frame: frame.label, mat: mat.label, price })
+                onAddToCart({
+                  title:    product.title,
+                  src:      product.src,
+                  size:     size.label,
+                  material: material.label,
+                  frame:    frame.label,
+                  mat:      mat.label,
+                  price,
+                })
               }}>
                 {t('shop.addToCart')}
               </button>
-              <p className="cm-note">{t('shop.note')}</p>
+              {mode === 'basic' && (
+                <button className="cm-frame-btn" onClick={enterCustomize}>
+                  Add Frame &amp; Customize →
+                </button>
+              )}
+              {mode === 'customize' && (
+                <p className="cm-note">{t('shop.note')}</p>
+              )}
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -288,79 +316,25 @@ function CustomizerModal({ product, onClose, onAddToCart }) {
 }
 
 /* ─── Product Card ─────────────────────────────────────────────── */
-function ProductCard({ product, onCustomize }) {
-  const { t } = useTranslation()
-  const { addItem } = useCart()
-  const [size,     setSize    ] = useState(PRINT_SIZES[1])
-  const [material, setMaterial] = useState(MATERIALS[0])
-
-  const price = Math.round(size.basePrice * material.mult)
-
-  const handleOrder = () => {
-    addItem({
-      title:    product.title,
-      src:      product.src,
-      size:     size.label,
-      material: material.label,
-      frame:    'No Frame',
-      mat:      'No Mat',
-      price,
-    })
-  }
+function ProductCard({ product, onOrder }) {
+  const startingPrice = Math.round(PRINT_SIZES[0].basePrice * MATERIALS[0].mult)
 
   return (
     <article className="sc-card" id={`product-${product.title.toLowerCase().replace(/\s+/g, '-')}`}>
-      {/* Full image — natural orientation */}
       <div className="sc-img-wrap">
         <img src={product.src} alt={product.title} loading="lazy" className="sc-img" />
-      </div>
-
-      <div className="sc-body">
-        <div className="sc-header">
-          <h3 className="sc-title">{product.title}</h3>
-          <span className="sc-edition">{t('shop.limitedEdition')} {product.edition}</span>
-        </div>
-
-        {/* Size selection */}
-        <div className="sc-opt-group">
-          <p className="sc-opt-label">{t('shop.size')}</p>
-          <div className="sc-pills">
-            {PRINT_SIZES.map(s => (
-              <button key={s.id}
-                className={`sc-pill ${size.id === s.id ? 'sc-pill--on' : ''}`}
-                onClick={() => setSize(s)}>
-                {s.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Paper type */}
-        <div className="sc-opt-group">
-          <p className="sc-opt-label">{t('shop.material')}</p>
-          <div className="sc-pills">
-            {MATERIALS.map(m => (
-              <button key={m.id}
-                className={`sc-pill ${material.id === m.id ? 'sc-pill--on' : ''}`}
-                onClick={() => setMaterial(m)}>
-                {m.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Price + Order */}
-        <div className="sc-footer">
-          <span className="sc-price">${price}</span>
-          <button className="btn sc-order-btn" onClick={handleOrder}>
+        <div className="sc-overlay">
+          <button className="sc-overlay-btn" onClick={() => onOrder(product)}>
             Order
           </button>
         </div>
-
-        {/* Customize link */}
-        <button className="sc-customize-link" onClick={() => onCustomize(product)}>
-          Customize &amp; Add Frame →
-        </button>
+      </div>
+      <div className="sc-body">
+        <div className="sc-info">
+          <h3 className="sc-title">{product.title}</h3>
+          <span className="sc-edition">Limited Edition · {product.edition}</span>
+        </div>
+        <span className="sc-from">From ${startingPrice}</span>
       </div>
     </article>
   )
@@ -410,13 +384,13 @@ function Shop() {
           <ProductCard
             key={p.id}
             product={p}
-            onCustomize={setSelected}
+            onOrder={setSelected}
           />
         ))}
       </div>
 
       {selected && (
-        <CustomizerModal
+        <OrderModal
           product={selected}
           onClose={() => setSelected(null)}
           onAddToCart={handleAddToCart}

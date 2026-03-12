@@ -47,12 +47,14 @@
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
-/* Image — natural orientation, contained in neutral bg */
+/* Image wrap with hover overlay */
 .sc-img-wrap {
+  position: relative;
   background: var(--gray-100);
   overflow: hidden;
   line-height: 0;
 }
+
 .sc-img {
   width: 100%;
   height: auto;
@@ -60,112 +62,98 @@
   object-fit: contain;
   transition: transform 0.55s ease;
 }
+
+/* Hover overlay */
+.sc-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.36);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+.sc-card:hover .sc-overlay {
+  opacity: 1;
+}
 .sc-card:hover .sc-img {
-  transform: scale(1.02);
+  transform: scale(1.03);
+}
+
+.sc-overlay-btn {
+  padding: 0.75rem 2.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  cursor: pointer;
+  transform: translateY(8px);
+  transition: transform 0.32s ease, background 0.18s ease;
+}
+.sc-card:hover .sc-overlay-btn {
+  transform: translateY(0);
+}
+.sc-overlay-btn:hover {
+  background: var(--gray-100);
 }
 
 /* Card body */
 .sc-body {
-  padding: 1.25rem 1.25rem 1.5rem;
+  padding: 1rem 1.25rem 1.25rem;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.sc-header {
-  display: flex;
-  align-items: baseline;
   justify-content: space-between;
+  align-items: center;
   gap: 0.5rem;
 }
+
+.sc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
 .sc-title {
   font-size: 0.88rem;
   letter-spacing: 0.09em;
   font-weight: 400;
   text-transform: uppercase;
+  color: var(--black);
 }
+
 .sc-edition {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--gray-400);
   letter-spacing: 0.06em;
-  white-space: nowrap;
-  margin: 0;
-  max-width: none;
-}
-
-/* Option groups inside card */
-.sc-opt-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-.sc-opt-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gray-600);
-  font-weight: 600;
-  margin: 0;
-  max-width: none;
-}
-.sc-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-.sc-pill {
-  padding: 0.32rem 0.65rem;
-  border: 1px solid var(--gray-200);
-  background: none;
   font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  color: var(--gray-600);
-  transition: all var(--transition);
 }
-.sc-pill:hover     { border-color: var(--gray-600); color: var(--black); }
-.sc-pill--on       { background: var(--black); border-color: var(--black); color: var(--white); }
 
-/* Price + order row */
-.sc-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--gray-200);
-}
-.sc-price {
-  font-size: 1.5rem;
+.sc-from {
+  font-size: 0.9rem;
   font-weight: 300;
-  letter-spacing: 0.04em;
   color: var(--black);
   font-family: var(--font-sans);
-}
-.sc-order-btn {
-  padding: 0.65rem 1.5rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-/* Customize text link */
-.sc-customize-link {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  color: var(--gray-400);
-  text-align: left;
-  padding: 0;
-  transition: color var(--transition);
+/* ── Highlight animation (from checkout nav) ─────────────────── */
+@keyframes scHighlight {
+  0%   { box-shadow: 0 0 0 3px rgba(0,0,0,0.55); }
+  60%  { box-shadow: 0 0 0 3px rgba(0,0,0,0.55); }
+  100% { box-shadow: none; }
 }
-.sc-customize-link:hover { color: var(--black); }
+.sc-card--highlight {
+  animation: scHighlight 1.8s ease forwards;
+}
 
 
 /* ══════════════════════════════════════════════════════════════
-   CUSTOMIZER MODAL
+   ORDER / CUSTOMIZER MODAL
    ══════════════════════════════════════════════════════════════ */
 
 .cm-overlay {
@@ -222,20 +210,35 @@
   overflow: hidden;
 }
 
-/* ── Preview pane ────────────────────────────────────────────── */
+/* ── Preview pane — room scene (customize mode) ───────────────── */
 .cm-preview-pane {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* push the art up into the wall area of the photo */
   padding: 2rem 2rem 22%;
   overflow: hidden;
   position: relative;
-  /* Minimalist living room stock photo */
   background:
     linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, transparent 20%),
     url('/showcasewall.jpeg')
     center / cover no-repeat;
+}
+
+/* ── Preview pane — plain photo (basic mode) ──────────────────── */
+.cm-preview-pane--plain {
+  background: var(--gray-100);
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cm-plain-img {
+  max-width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  display: block;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.1);
 }
 
 /* ── Frame preview scene ─────────────────────────────────────── */
@@ -248,7 +251,6 @@
   z-index: 3;
 }
 
-/* nail/hook on wall */
 .fp-nail {
   width: 6px;
   height: 6px;
@@ -270,16 +272,13 @@
 }
 
 .fp-artwork {
-  display: inline-flex;   /* shrink-wraps the content */
+  display: inline-flex;
   position: relative;
-  /* transition set via inline style */
 }
 .fp-artwork img {
   display: block;
-  /* width/height/transition set via inline style */
 }
 
-/* floor shadow */
 .fp-floor-shadow {
   height: 12px;
   background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.22) 0%, transparent 75%);
@@ -308,7 +307,6 @@
   flex-direction: column;
   gap: 1.25rem;
   min-height: 0;
-  /* custom thin scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--gray-200) transparent;
 }
@@ -344,13 +342,6 @@
   justify-content: space-between;
 }
 
-.opt-add {
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: var(--gray-400);
-  letter-spacing: 0.04em;
-}
-
 /* ── Size pills ──────────────────────────────────────────────── */
 .opt-pills {
   display: flex;
@@ -369,8 +360,8 @@
   color: var(--gray-600);
   transition: all var(--transition);
 }
-.opt-pill:hover        { border-color: var(--gray-600); color: var(--black); }
-.opt-pill--on          { background: var(--black); border-color: var(--black); color: var(--white); }
+.opt-pill:hover  { border-color: var(--gray-600); color: var(--black); }
+.opt-pill--on    { background: var(--black); border-color: var(--black); color: var(--white); }
 
 /* ── Material list ───────────────────────────────────────────── */
 .mat-list {
@@ -397,7 +388,7 @@
 .mat-item__name  { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em; color: var(--black); }
 .mat-item__desc  { font-size: 0.68rem; color: var(--gray-400); letter-spacing: 0.02em; margin-top: 0.08rem; }
 
-/* ── Frame swatches (3-col grid) ─────────────────────────────── */
+/* ── Frame swatches ──────────────────────────────────────────── */
 .sw-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -442,7 +433,7 @@
   text-align: center;
 }
 
-/* ── Mat swatches (row) ──────────────────────────────────────── */
+/* ── Mat swatches ────────────────────────────────────────────── */
 .mat-swatches {
   display: flex;
   gap: 0.45rem;
@@ -503,6 +494,25 @@
   letter-spacing: 0.14em;
 }
 
+/* "Add Frame & Customize →" secondary button */
+.cm-frame-btn {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: none;
+  border: 1px solid var(--gray-300);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--gray-600);
+  text-align: center;
+  transition: border-color var(--transition), color var(--transition);
+}
+.cm-frame-btn:hover {
+  border-color: var(--black);
+  color: var(--black);
+}
+
 .cm-note {
   font-size: 0.67rem;
   color: var(--gray-400);
@@ -515,86 +525,9 @@
 
 
 /* ══════════════════════════════════════════════════════════════
-   CART TOAST
-   ══════════════════════════════════════════════════════════════ */
-
-.cart-toast {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: var(--black);
-  color: var(--white);
-  padding: 1rem 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  z-index: 1100;
-  max-width: 380px;
-  animation: toastSlide 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-}
-
-@keyframes toastSlide {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
-.ct-check {
-  width: 30px;
-  height: 30px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-}
-
-.ct-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.05rem;
-}
-.ct-info strong {
-  font-size: 0.86rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.ct-info span {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.55);
-  letter-spacing: 0.03em;
-}
-
-.ct-price {
-  font-size: 1rem;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
-}
-
-.ct-close {
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.5);
-  font-size: 1.4rem;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0 0 0 0.5rem;
-  flex-shrink: 0;
-  transition: color var(--transition);
-}
-.ct-close:hover { color: var(--white); }
-
-
-/* ══════════════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════════════ */
 
-/* Tablet / narrower desktop */
 @media (max-width: 980px) {
   .cm-layout {
     grid-template-columns: 1fr;
@@ -611,10 +544,18 @@
   }
 
   .cm-preview-pane {
-    min-height: 320px;
-    max-height: 380px;
-    padding: 2.5rem 1.5rem 2rem;
+    min-height: 280px;
+    max-height: 340px;
+    padding: 2rem 1.5rem 2rem;
     flex-shrink: 0;
+  }
+
+  .cm-preview-pane--plain {
+    padding: 1.5rem;
+  }
+
+  .cm-plain-img {
+    max-height: 260px;
   }
 
   .cm-options-pane {
@@ -626,17 +567,6 @@
   }
 }
 
-/* ─── Product highlight (from checkout nav) ─────────────────── */
-@keyframes scHighlight {
-  0%   { box-shadow: 0 0 0 3px rgba(0,0,0,0.55); }
-  60%  { box-shadow: 0 0 0 3px rgba(0,0,0,0.55); }
-  100% { box-shadow: none; }
-}
-.sc-card--highlight {
-  animation: scHighlight 1.8s ease forwards;
-}
-
-/* Mobile */
 @media (max-width: 600px) {
   .shop__props { gap: 1.5rem; flex-direction: column; align-items: center; }
 
@@ -648,11 +578,4 @@
   .sw-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
 
   .cm-price-amount { font-size: 1.6rem; }
-
-  .cart-toast {
-    bottom: 1rem;
-    right: 1rem;
-    left: 1rem;
-    max-width: none;
-  }
 }
