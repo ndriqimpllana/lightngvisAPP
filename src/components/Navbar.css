@@ -41,6 +41,7 @@
   text-transform: uppercase;
   position: relative;
   padding-bottom: 2px;
+  font-weight: 700;
 }
 
 .navbar__section-link {
