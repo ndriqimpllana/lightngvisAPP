@@ -243,6 +243,22 @@
   letter-spacing: 0.14em;
 }
 
+.cart-drawer__clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  text-align: center;
+  width: 100%;
+  padding: 0.25rem 0;
+  transition: color var(--transition);
+}
+.cart-drawer__clear:hover { color: #c0392b; }
+
 .cart-drawer__secure {
   font-size: 0.65rem;
   color: var(--gray-400);

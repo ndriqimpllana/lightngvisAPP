@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext'
 import './CartDrawer.css'
 
 export default function CartDrawer() {
-  const { items, removeItem, updateQty, totalPrice, isOpen, setIsOpen } = useCart()
+  const { items, removeItem, updateQty, totalPrice, clearCart, isOpen, setIsOpen } = useCart()
   const navigate = useNavigate()
 
   // Lock body scroll while open
@@ -92,6 +92,12 @@ export default function CartDrawer() {
               </div>
               <button className="btn cart-drawer__checkout" onClick={handleCheckout}>
                 Proceed to Checkout
+              </button>
+              <button
+                className="cart-drawer__clear"
+                onClick={() => { if (window.confirm('Remove all items from your cart?')) clearCart() }}
+              >
+                Empty cart
               </button>
               <p className="cart-drawer__secure">Secure payment via Stripe</p>
             </div>

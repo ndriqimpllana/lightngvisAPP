@@ -293,6 +293,27 @@
   padding: 2rem;
 }
 
+.co-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.co-clear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  transition: color var(--transition);
+  padding: 0;
+}
+.co-clear-btn:hover { color: #c0392b; }
+
 .co-items {
   display: flex;
   flex-direction: column;

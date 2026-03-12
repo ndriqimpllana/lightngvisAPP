@@ -328,7 +328,7 @@ function PaymentForm({ totalPrice, clientSecret }) {
 
 /* ── Page ────────────────────────────────────────────────────── */
 export default function Checkout() {
-  const { items, totalPrice, totalCount, removeItem, updateQty } = useCart()
+  const { items, totalPrice, totalCount, removeItem, updateQty, clearCart } = useCart()
   const [clientSecret, setClientSecret] = useState(null)
   const [fetchError,   setFetchError  ] = useState(null)
   const [intentLoading, setIntentLoading] = useState(false)
@@ -390,7 +390,15 @@ export default function Checkout() {
         </div>
 
         <aside className="co-summary">
-          <p className="co-label">Order summary · {totalCount} {totalCount === 1 ? 'item' : 'items'}</p>
+          <div className="co-summary-header">
+            <p className="co-label">Order summary · {totalCount} {totalCount === 1 ? 'item' : 'items'}</p>
+            <button
+              className="co-clear-btn"
+              onClick={() => { if (window.confirm('Remove all items from your cart?')) clearCart() }}
+            >
+              Empty cart
+            </button>
+          </div>
           <ul className="co-items">
             {items.map((item, idx) => (
               <li key={idx} className="co-item">
