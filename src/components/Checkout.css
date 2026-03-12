@@ -300,17 +300,24 @@
   margin-bottom: 1.5rem;
 }
 
+.co-summary-header .co-label {
+  margin-bottom: 0;
+}
+
 .co-clear-btn {
   background: none;
   border: none;
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 0.65rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gray-400);
   transition: color var(--transition);
   padding: 0;
+  line-height: 1;
+  align-self: center;
 }
 .co-clear-btn:hover { color: #c0392b; }
 
