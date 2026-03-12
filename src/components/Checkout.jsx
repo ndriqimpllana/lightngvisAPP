@@ -7,7 +7,6 @@ import './Checkout.css'
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
 
-/* ── Stripe appearance matching site theme ───────────────────── */
 const STRIPE_APPEARANCE = {
   theme: 'stripe',
   variables: {
@@ -17,56 +16,38 @@ const STRIPE_APPEARANCE = {
     colorDanger: '#c0392b',
     fontFamily: '"Roboto", "Helvetica Neue", Arial, sans-serif',
     borderRadius: '0px',
-    fontSizeBase: '14px',
+    fontSizeBase: '15px',
+    spacingUnit: '5px',
   },
   rules: {
-    '.Input': {
-      border: '1px solid #e5e5e5',
-      boxShadow: 'none',
-      padding: '0.7rem 0.85rem',
-    },
-    '.Input:focus': {
-      border: '1px solid #000000',
-      boxShadow: 'none',
-      outline: 'none',
-    },
-    '.Label': {
-      fontSize: '0.62rem',
-      letterSpacing: '0.16em',
-      textTransform: 'uppercase',
-      color: '#525252',
-      fontFamily: '"Roboto", sans-serif',
-    },
+    '.Input': { border: '1px solid #e5e5e5', boxShadow: 'none', padding: '12px 14px' },
+    '.Input:focus': { border: '1px solid #000', boxShadow: 'none' },
+    '.Label': { fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#525252' },
     '.Tab': { border: '1px solid #e5e5e5', boxShadow: 'none' },
     '.Tab--selected': { border: '1px solid #000', boxShadow: 'none' },
+    '.Tab--selected:focus': { boxShadow: 'none' },
+    '.Block': { border: '1px solid #e5e5e5', boxShadow: 'none' },
   },
 }
 
-/* ── Payment form (must be inside <Elements>) ────────────────── */
+/* ── Payment form inside Elements ────────────────────────────── */
 function PaymentForm({ totalPrice }) {
   const stripe   = useStripe()
   const elements = useElements()
   const { clearCart } = useCart()
   const navigate = useNavigate()
-
   const [loading, setLoading] = useState(false)
   const [error,   setError  ] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!stripe || !elements) return
-
     setLoading(true)
     setError(null)
 
-    const { error: submitErr } = await elements.submit()
-    if (submitErr) { setError(submitErr.message); setLoading(false); return }
-
     const { error: confirmErr } = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/shop?order=success`,
-      },
+      confirmParams: { return_url: `${window.location.origin}/shop?order=success` },
       redirect: 'if_required',
     })
 
@@ -80,22 +61,36 @@ function PaymentForm({ totalPrice }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="checkout-form__group">
-      <span className="checkout-section-label">Payment</span>
-      <PaymentElement />
-      {error && <p className="checkout-error">{error}</p>}
-      <button type="submit" className="btn checkout-submit" disabled={!stripe || loading}>
+    <form onSubmit={handleSubmit}>
+      <div className="co-payment-wrap">
+        <p className="co-label">Payment details</p>
+        <PaymentElement options={{ layout: 'tabs' }} />
+      </div>
+
+      {error && <p className="co-error">{error}</p>}
+
+      <button
+        type="submit"
+        className="btn co-pay-btn"
+        disabled={!stripe || loading}
+      >
         {loading ? 'Processing…' : `Pay $${totalPrice}`}
       </button>
-      <p className="checkout-secure">Secured by Stripe · SSL encrypted</p>
+
+      <p className="co-secure">
+        <svg width="11" height="13" viewBox="0 0 11 13" fill="none" style={{marginRight:'6px',verticalAlign:'middle'}}>
+          <rect x="1" y="5" width="9" height="7" rx="1" stroke="currentColor" strokeWidth="1.2"/>
+          <path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" strokeWidth="1.2"/>
+        </svg>
+        Secured by Stripe · SSL encrypted
+      </p>
     </form>
   )
 }
 
-/* ── Main checkout page ──────────────────────────────────────── */
+/* ── Main page ───────────────────────────────────────────────── */
 export default function Checkout() {
   const { items, totalPrice, totalCount } = useCart()
-  const navigate = useNavigate()
   const [clientSecret, setClientSecret] = useState(null)
   const [fetchError,   setFetchError  ] = useState(null)
 
@@ -109,14 +104,14 @@ export default function Checkout() {
       .then(r => r.json())
       .then(d => {
         if (d.clientSecret) setClientSecret(d.clientSecret)
-        else setFetchError('Could not initialise payment. Please try again.')
+        else setFetchError(d.error || 'Could not initialise payment — please try again.')
       })
       .catch(() => setFetchError('Could not connect to payment service.'))
-  }, [])  // run once on mount
+  }, [])
 
   if (items.length === 0) {
     return (
-      <div className="checkout-empty">
+      <div className="co-empty">
         <p>Your cart is empty.</p>
         <Link to="/shop" className="btn">Back to Shop</Link>
       </div>
@@ -124,64 +119,81 @@ export default function Checkout() {
   }
 
   return (
-    <div className="checkout-page">
-      <div className="checkout-page__inner">
+    <div className="co-page">
+      {/* Back link */}
+      <Link to="/shop" className="co-back">← Back to Shop</Link>
 
-        {/* ── Left: order summary ── */}
-        <div className="checkout-summary">
-          <h1 className="checkout-summary__title">Your Order</h1>
-          <span className="checkout-section-label">{totalCount} {totalCount === 1 ? 'item' : 'items'}</span>
+      <div className="co-grid">
 
-          <div className="checkout-summary__items">
-            {items.map((item, idx) => (
-              <div className="co-item" key={idx}>
-                <img src={item.src} alt={item.title} className="co-item__img" />
-                <div className="co-item__info">
-                  <span className="co-item__title">{item.title}</span>
-                  <span className="co-item__meta">{item.size} · {item.material}</span>
-                  {item.frame !== 'No Frame' && (
-                    <span className="co-item__meta">
-                      {item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}
-                    </span>
-                  )}
-                  <span className="co-item__meta">Qty {item.qty}</span>
-                  <span className="co-item__price">${item.price * item.qty}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* ── LEFT: payment form ── */}
+        <div className="co-left">
+          <h1 className="co-heading">Checkout</h1>
 
-          <div className="checkout-summary__totals">
-            <div className="co-total-row">
-              <span>Subtotal</span>
-              <span>${totalPrice}</span>
+          {fetchError && (
+            <div className="co-fetch-error">
+              <strong>Payment unavailable</strong>
+              <p>{fetchError}</p>
             </div>
-            <div className="co-total-row">
-              <span>Shipping</span>
-              <span>Calculated at next step</span>
-            </div>
-            <div className="co-total-row co-total-row--grand">
-              <span>Total</span>
-              <span>${totalPrice}</span>
-            </div>
-          </div>
-        </div>
+          )}
 
-        {/* ── Right: payment ── */}
-        <div className="checkout-form-col">
-          {fetchError && <p className="checkout-error">{fetchError}</p>}
+          {!clientSecret && !fetchError && (
+            <div className="co-loading">
+              <span />
+              <span />
+              <span />
+            </div>
+          )}
 
-          {clientSecret ? (
+          {clientSecret && (
             <Elements
               stripe={stripePromise}
               options={{ clientSecret, appearance: STRIPE_APPEARANCE }}
             >
               <PaymentForm totalPrice={totalPrice} />
             </Elements>
-          ) : !fetchError ? (
-            <p className="checkout-secure" style={{ marginTop: '4rem' }}>Loading payment…</p>
-          ) : null}
+          )}
         </div>
+
+        {/* ── RIGHT: order summary ── */}
+        <aside className="co-summary">
+          <p className="co-label">Order summary · {totalCount} {totalCount === 1 ? 'item' : 'items'}</p>
+
+          <ul className="co-items">
+            {items.map((item, idx) => (
+              <li key={idx} className="co-item">
+                <div className="co-item__img-wrap">
+                  <img src={item.src} alt={item.title} className="co-item__img" />
+                  {item.qty > 1 && <span className="co-item__qty-badge">{item.qty}</span>}
+                </div>
+                <div className="co-item__details">
+                  <span className="co-item__title">{item.title}</span>
+                  <span className="co-item__spec">{item.size} · {item.material}</span>
+                  {item.frame !== 'No Frame' && (
+                    <span className="co-item__spec">
+                      {item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}
+                    </span>
+                  )}
+                </div>
+                <span className="co-item__price">${item.price * item.qty}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="co-totals">
+            <div className="co-totals__row">
+              <span>Subtotal</span>
+              <span>${totalPrice}</span>
+            </div>
+            <div className="co-totals__row">
+              <span>Shipping</span>
+              <span>Free</span>
+            </div>
+            <div className="co-totals__row co-totals__row--total">
+              <span>Total</span>
+              <span>${totalPrice}</span>
+            </div>
+          </div>
+        </aside>
 
       </div>
     </div>
