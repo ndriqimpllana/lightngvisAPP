@@ -1,4 +1,7 @@
 .hero {
+  --white: #ffffff;
+  --black: #000000;
+  --gray-600: #525252;
   height: 100vh;
   display: flex;
   flex-direction: column;
