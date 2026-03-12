@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCart } from '../context/CartContext'
 import './Navbar.css'
@@ -38,9 +38,12 @@ function Navbar() {
   }
 
   const { totalCount, setIsOpen: openCart } = useCart()
+  const { pathname } = useLocation()
+  const isHome = pathname === '/'
+  const isDark = !isHome || pastHero
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${pastHero ? 'navbar--dark' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${isDark ? 'navbar--dark' : ''}`}>
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
           LIGHTNGVIS
