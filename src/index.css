@@ -125,3 +125,16 @@ p {
 ::-webkit-scrollbar-thumb {
   background: var(--gray-400);
 }
+
+/* ── Snap scrolling — home page only ── */
+html.snap-home {
+  scroll-snap-type: y proximity;
+}
+html.snap-home #hero {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+html.snap-home #work,
+html.snap-home #about {
+  scroll-snap-align: start;
+}

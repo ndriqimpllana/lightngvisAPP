@@ -335,6 +335,7 @@
   min-height: 0;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-200) transparent;
+  font-family: var(--font-sans);
 }
 .cm-options-pane::-webkit-scrollbar { width: 4px; }
 .cm-options-pane::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
@@ -379,7 +380,7 @@
   padding: 0.42rem 0.85rem;
   border: 1px solid var(--gray-200);
   background: none;
-  font-family: inherit;
+  font-family: var(--font-sans);
   font-size: 0.76rem;
   letter-spacing: 0.05em;
   cursor: pointer;
@@ -404,7 +405,7 @@
   border: 1px solid var(--gray-200);
   background: none;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-sans);
   text-align: left;
   transition: all var(--transition);
 }
@@ -430,7 +431,7 @@
   border: 1px solid var(--gray-200);
   background: none;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-sans);
   transition: all var(--transition);
 }
 .sw-btn:hover  { border-color: var(--gray-600); }
@@ -475,7 +476,7 @@
   border: 1px solid var(--gray-200);
   background: none;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-sans);
   transition: all var(--transition);
 }
 .msw-btn:hover  { border-color: var(--gray-600); }

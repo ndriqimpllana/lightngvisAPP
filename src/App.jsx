@@ -36,6 +36,14 @@ function ShopWithSuccess() {
   )
 }
 
+function HomePage() {
+  useEffect(() => {
+    document.documentElement.classList.add('snap-home')
+    return () => document.documentElement.classList.remove('snap-home')
+  }, [])
+  return <><Hero /><Gallery /><About /></>
+}
+
 function App() {
   return (
     <CartProvider>
@@ -43,7 +51,7 @@ function App() {
       <CartDrawer />
       <Toaster richColors position="bottom-right" duration={1000} />
       <Routes>
-        <Route path="/" element={<><Hero /><Gallery /><About /></>} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopWithSuccess />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<Checkout />} />
