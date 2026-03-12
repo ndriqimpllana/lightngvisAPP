@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import './CartDrawer.css'
@@ -6,6 +6,7 @@ import './CartDrawer.css'
 export default function CartDrawer() {
   const { items, removeItem, updateQty, totalPrice, clearCart, isOpen, setIsOpen } = useCart()
   const navigate = useNavigate()
+  const [confirmClear, setConfirmClear] = useState(false)
 
   // Lock body scroll while open
   useEffect(() => {
@@ -93,9 +94,19 @@ export default function CartDrawer() {
               <button className="btn cart-drawer__checkout" onClick={handleCheckout}>
                 Proceed to Checkout
               </button>
-              <button className="cart-drawer__clear" onClick={clearCart}>
-                Empty cart
-              </button>
+              {confirmClear ? (
+                <div className="cart-drawer__confirm">
+                  <span>Remove all items?</span>
+                  <div className="cart-drawer__confirm-btns">
+                    <button onClick={() => { clearCart(); setConfirmClear(false) }}>Yes</button>
+                    <button onClick={() => setConfirmClear(false)}>Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <button className="cart-drawer__clear" onClick={() => setConfirmClear(true)}>
+                  Empty cart
+                </button>
+              )}
               <p className="cart-drawer__secure">Secure payment via Stripe</p>
             </div>
           </>

@@ -314,6 +314,45 @@
 }
 .co-clear-btn:hover { color: #c0392b; }
 
+.co-confirm-clear {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.co-confirm-clear span {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--gray-600);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+}
+
+.co-confirm-yes,
+.co-confirm-cancel {
+  background: none;
+  border: 1px solid var(--gray-200);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.co-confirm-yes {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+.co-confirm-yes:hover {
+  background: #c0392b;
+  color: var(--white);
+}
+.co-confirm-cancel:hover {
+  background: var(--gray-100);
+}
+
 .co-items {
   display: flex;
   flex-direction: column;
