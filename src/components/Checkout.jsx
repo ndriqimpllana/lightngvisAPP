@@ -328,21 +328,41 @@ function PaymentForm({ totalPrice, clientSecret }) {
 
 /* ── Page ────────────────────────────────────────────────────── */
 export default function Checkout() {
-  const { items, totalPrice, totalCount } = useCart()
+  const { items, totalPrice, totalCount, removeItem, updateQty } = useCart()
   const [clientSecret, setClientSecret] = useState(null)
   const [fetchError,   setFetchError  ] = useState(null)
+  const [intentLoading, setIntentLoading] = useState(false)
+  const debounceRef = useRef(null)
 
-  useEffect(() => {
-    if (items.length === 0) return
+  const fetchIntent = useCallback((cartItems) => {
+    if (cartItems.length === 0) return
+    setIntentLoading(true)
     fetch('/api/create-payment-intent', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ items }),
+      body:    JSON.stringify({ items: cartItems }),
     })
       .then(r => r.json())
-      .then(d => { if (d.clientSecret) setClientSecret(d.clientSecret); else setFetchError(d.error || 'Could not initialise payment.') })
+      .then(d => {
+        if (d.clientSecret) { setClientSecret(d.clientSecret); setFetchError(null) }
+        else setFetchError(d.error || 'Could not initialise payment.')
+      })
       .catch(() => setFetchError('Could not connect to payment service. Make sure STRIPE_SECRET_KEY is set in Vercel.'))
+      .finally(() => setIntentLoading(false))
   }, [])
+
+  // Initial load
+  useEffect(() => { fetchIntent(items) }, [])
+
+  // Refresh intent when cart changes (debounced)
+  const itemsRef = useRef(items)
+  useEffect(() => {
+    if (itemsRef.current === items) return // skip initial render
+    itemsRef.current = items
+    clearTimeout(debounceRef.current)
+    if (items.length === 0) { setClientSecret(null); return }
+    debounceRef.current = setTimeout(() => fetchIntent(items), 400)
+  }, [items, fetchIntent])
 
   if (items.length === 0) {
     return (
@@ -374,22 +394,33 @@ export default function Checkout() {
           <ul className="co-items">
             {items.map((item, idx) => (
               <li key={idx} className="co-item">
-                <div className="co-item__img-wrap">
-                  <img src={item.src} alt={item.title} className="co-item__img" />
-                  {item.qty > 1 && <span className="co-item__qty-badge">{item.qty}</span>}
-                </div>
+                <img src={item.src} alt={item.title} className="co-item__img" />
                 <div className="co-item__details">
-                  <span className="co-item__title">{item.title}</span>
+                  <div className="co-item__top-row">
+                    <span className="co-item__title">{item.title}</span>
+                    <button className="co-item__remove" onClick={() => removeItem(idx)} aria-label="Remove item">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                      </svg>
+                    </button>
+                  </div>
                   <span className="co-item__spec">{item.size} · {item.material}</span>
                   {item.frame !== 'No Frame' && (
                     <span className="co-item__spec">{item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}</span>
                   )}
-                  <span className="co-item__spec">Qty {item.qty}</span>
+                  <div className="co-item__bottom-row">
+                    <div className="co-item__qty-ctrl">
+                      <button onClick={() => updateQty(idx, item.qty - 1)} aria-label="Decrease">−</button>
+                      <span>{item.qty}</span>
+                      <button onClick={() => updateQty(idx, item.qty + 1)} aria-label="Increase">+</button>
+                    </div>
+                    <span className="co-item__price">${item.price * item.qty}</span>
+                  </div>
                 </div>
-                <span className="co-item__price">${item.price * item.qty}</span>
               </li>
             ))}
           </ul>
+          {intentLoading && <p className="co-intent-refresh">Updating total…</p>}
           <div className="co-totals">
             <div className="co-totals__row"><span>Subtotal</span><span>${totalPrice}</span></div>
             <div className="co-totals__row"><span>Shipping</span><span>Free</span></div>
