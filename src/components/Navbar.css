@@ -25,6 +25,10 @@
   box-shadow: none;
 }
 
+.navbar--dark .navbar__cart {
+  color: #ffffff;
+}
+
 .navbar--dark .navbar__cart-badge {
   background: #ffffff;
   color: #000000;
