@@ -45,8 +45,8 @@ function Hero() {
   const contentOpacity = Math.max(0, 1 - scrollY / (vh * 0.4))
   const contentY = scrollY * 0.25
 
-  // Overlay fades from 0.75 → 0.08 as you scroll through the full hero
-  const overlayOpacity = Math.max(0.08, 0.75 - (scrollY / vh) * 0.9)
+  // Overlay fades from 0.45 → 0.08 as you scroll through the full hero
+  const overlayOpacity = Math.max(0.08, 0.45 - (scrollY / vh) * 0.5)
 
   // Scroll indicator fades between 20%–60% of hero
   const scrollIndicatorOpacity = Math.max(0, 1 - (scrollY - vh * 0.1) / (vh * 0.35))
