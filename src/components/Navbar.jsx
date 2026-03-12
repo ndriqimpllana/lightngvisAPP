@@ -7,10 +7,14 @@ import './Navbar.css'
 function Navbar() {
   const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
+  const [pastHero, setPastHero] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50)
+      setPastHero(window.scrollY >= window.innerHeight * 0.85)
+    }
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -36,7 +40,7 @@ function Navbar() {
   const { totalCount, setIsOpen: openCart } = useCart()
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${pastHero ? 'navbar--dark' : ''}`}>
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
           LIGHTNGVIS

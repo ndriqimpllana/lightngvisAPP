@@ -19,6 +19,17 @@
   box-shadow: 0 1px 0 var(--gray-200);
 }
 
+.navbar--dark {
+  background-color: #000000;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.navbar--dark .navbar__cart-badge {
+  background: #ffffff;
+  color: #000000;
+}
+
 .navbar__inner {
   max-width: 1200px;
   margin: 0 auto;
