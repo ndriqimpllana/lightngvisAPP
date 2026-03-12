@@ -64,11 +64,11 @@
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--gray-600);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .hero__title {
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   letter-spacing: 0.12em;
   color: var(--black);
