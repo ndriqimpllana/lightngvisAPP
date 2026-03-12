@@ -114,6 +114,83 @@
   color: var(--gray-400);
 }
 
+.co-input--error {
+  border-color: #c0392b !important;
+}
+
+.co-field-error {
+  font-size: 0.68rem;
+  color: #c0392b;
+  font-family: var(--font-sans);
+  letter-spacing: 0.02em;
+}
+
+/* ── Checkbox ────────────────────────────────────────────────── */
+.co-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  color: var(--gray-600);
+  letter-spacing: 0.04em;
+}
+.co-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--black);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Address autocomplete dropdown ───────────────────────────── */
+.co-autocomplete {
+  position: relative;
+}
+.co-autocomplete input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  color: var(--black);
+  outline: none;
+  transition: border-color var(--transition);
+  border-radius: 0;
+}
+.co-autocomplete input:focus {
+  border-color: var(--black);
+}
+
+.co-autocomplete__list {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-top: none;
+  z-index: 200;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.co-autocomplete__item {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  color: var(--gray-800);
+  cursor: pointer;
+  border-bottom: 1px solid var(--gray-100);
+  line-height: 1.4;
+  transition: background var(--transition);
+}
+.co-autocomplete__item:last-child { border-bottom: none; }
+.co-autocomplete__item:hover { background: var(--gray-100); }
+
 /* Stripe card element wrapper — must have explicit height */
 .co-card-wrap {
   padding: 0.75rem 0.9rem;

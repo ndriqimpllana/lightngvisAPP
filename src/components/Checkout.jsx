@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { loadStripe } from '@stripe/stripe-js'
 import {
@@ -17,15 +17,136 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
 const CARD_STYLE = {
   style: {
     base: {
-      fontFamily: '"Roboto", "Helvetica Neue", Arial, sans-serif',
+      fontFamily: '"Roboto","Helvetica Neue",Arial,sans-serif',
       fontSize: '15px',
-      color: '#000000',
+      color: '#000',
       letterSpacing: '0.02em',
       '::placeholder': { color: '#a3a3a3' },
     },
     invalid: { color: '#c0392b' },
   },
 }
+
+/* ── Validators ──────────────────────────────────────────────── */
+const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())
+const isValidPhone = (v) => v.replace(/\D/g, '').length === 10
+
+const formatPhone = (raw) => {
+  const digits = raw.replace(/\D/g, '').slice(0, 10)
+  if (digits.length <= 3)  return digits
+  if (digits.length <= 6)  return `(${digits.slice(0,3)}) ${digits.slice(3)}`
+  return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`
+}
+
+/* ── Address autocomplete (OpenStreetMap Nominatim, no key) ───── */
+function AddressAutocomplete({ value, onChange, onSelect }) {
+  const [suggestions, setSuggestions] = useState([])
+  const [open,        setOpen       ] = useState(false)
+  const timerRef = useRef(null)
+  const wrapRef  = useRef(null)
+
+  const search = useCallback((q) => {
+    clearTimeout(timerRef.current)
+    if (q.length < 4) { setSuggestions([]); setOpen(false); return }
+    timerRef.current = setTimeout(async () => {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&addressdetails=1&countrycodes=us&limit=6`
+        const res = await fetch(url, { headers: { 'Accept-Language': 'en' } })
+        const data = await res.json()
+        setSuggestions(data)
+        setOpen(data.length > 0)
+      } catch { /* silent */ }
+    }, 350)
+  }, [])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const pick = (item) => {
+    const a = item.address || {}
+    const street = [a.house_number, a.road].filter(Boolean).join(' ') || item.display_name.split(',')[0]
+    onSelect({
+      address: street,
+      city:    a.city || a.town || a.village || a.hamlet || '',
+      state:   a.state || '',
+      zip:     a.postcode || '',
+    })
+    setOpen(false)
+    setSuggestions([])
+  }
+
+  return (
+    <div ref={wrapRef} className="co-autocomplete">
+      <input
+        type="text"
+        placeholder="123 Main St"
+        autoComplete="off"
+        value={value}
+        onChange={(e) => { onChange(e.target.value); search(e.target.value) }}
+      />
+      {open && (
+        <ul className="co-autocomplete__list">
+          {suggestions.map((s) => (
+            <li key={s.place_id} onMouseDown={() => pick(s)} className="co-autocomplete__item">
+              {s.display_name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+/* ── Reusable address block ──────────────────────────────────── */
+function AddressFields({ prefix, data, onChange }) {
+  const f = (field) => ({
+    value: data[field],
+    onChange: (val) => onChange({ ...data, [field]: typeof val === 'string' ? val : val.target.value }),
+  })
+
+  return (
+    <div className="co-field-grid">
+      <div className="co-field co-field--full">
+        <label>Street address</label>
+        <AddressAutocomplete
+          value={data.address}
+          onChange={(val) => onChange({ ...data, address: val })}
+          onSelect={(filled) => onChange({ ...data, ...filled })}
+        />
+      </div>
+      <div className="co-field">
+        <label>City</label>
+        <input type="text" placeholder="New York" required {...f('city')} />
+      </div>
+      <div className="co-field">
+        <label>State</label>
+        <input type="text" placeholder="NY" {...f('state')} />
+      </div>
+      <div className="co-field">
+        <label>ZIP code</label>
+        <input type="text" placeholder="10001" required {...f('zip')} />
+      </div>
+      <div className="co-field">
+        <label>Country</label>
+        <select value={data.country} onChange={(e) => onChange({ ...data, country: e.target.value })}>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+          <option value="GB">United Kingdom</option>
+          <option value="AU">Australia</option>
+          <option value="DE">Germany</option>
+          <option value="FR">France</option>
+          <option value="AL">Albania</option>
+        </select>
+      </div>
+    </div>
+  )
+}
+
+const emptyAddr = { address: '', city: '', state: '', zip: '', country: 'US' }
 
 /* ── Payment form ────────────────────────────────────────────── */
 function PaymentForm({ totalPrice, clientSecret }) {
@@ -34,144 +155,157 @@ function PaymentForm({ totalPrice, clientSecret }) {
   const { clearCart } = useCart()
   const navigate = useNavigate()
 
-  const [loading, setLoading] = useState(false)
-  const [error,   setError  ] = useState(null)
+  const [loading,  setLoading ] = useState(false)
+  const [error,    setError   ] = useState(null)
 
-  // Contact fields
-  const [email,   setEmail  ] = useState('')
-  const [phone,   setPhone  ] = useState('')
-  // Shipping fields
-  const [name,    setName   ] = useState('')
-  const [address, setAddress] = useState('')
-  const [city,    setCity   ] = useState('')
-  const [state,   setState  ] = useState('')
-  const [zip,     setZip    ] = useState('')
-  const [country, setCountry] = useState('US')
+  // Contact
+  const [email,      setEmail     ] = useState('')
+  const [emailErr,   setEmailErr  ] = useState('')
+  const [phone,      setPhone     ] = useState('')
+  const [phoneErr,   setPhoneErr  ] = useState('')
+
+  // Shipping
+  const [shipName,   setShipName  ] = useState('')
+  const [shipAddr,   setShipAddr  ] = useState(emptyAddr)
+
+  // Billing
+  const [billSame,   setBillSame  ] = useState(true)
+  const [billName,   setBillName  ] = useState('')
+  const [billAddr,   setBillAddr  ] = useState(emptyAddr)
+
+  // Card name
+  const [cardName,   setCardName  ] = useState('')
+
+  const handlePhoneChange = (e) => {
+    setPhone(formatPhone(e.target.value))
+    if (phoneErr) setPhoneErr('')
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!stripe || !elements) return
+
+    // Client-side validation
+    let valid = true
+    if (!isValidEmail(email)) { setEmailErr('Enter a valid email address'); valid = false }
+    if (phone && !isValidPhone(phone)) { setPhoneErr('Enter a valid 10-digit US phone number'); valid = false }
+    if (!valid) return
+
     setLoading(true)
     setError(null)
+
+    const billing = billSame
+      ? { name: shipName, address: { line1: shipAddr.address, city: shipAddr.city, state: shipAddr.state, postal_code: shipAddr.zip, country: shipAddr.country } }
+      : { name: billName, address: { line1: billAddr.address, city: billAddr.city, state: billAddr.state, postal_code: billAddr.zip, country: billAddr.country } }
 
     const card = elements.getElement(CardNumberElement)
     const { error: pmErr, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card,
-      billing_details: {
-        name,
-        email,
-        phone,
-        address: { line1: address, city, state, postal_code: zip, country },
-      },
+      billing_details: { ...billing, email, phone: phone.replace(/\D/g,'') },
     })
 
     if (pmErr) { setError(pmErr.message); setLoading(false); return }
 
     const { error: confirmErr } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: paymentMethod.id,
-      receipt_email: email,
+      receipt_email:  email,
       shipping: {
-        name,
-        phone,
-        address: { line1: address, city, state, postal_code: zip, country },
+        name:    shipName,
+        phone:   phone.replace(/\D/g,''),
+        address: { line1: shipAddr.address, city: shipAddr.city, state: shipAddr.state, postal_code: shipAddr.zip, country: shipAddr.country },
       },
     })
 
-    if (confirmErr) {
-      setError(confirmErr.message)
-      setLoading(false)
-    } else {
-      clearCart()
-      navigate('/shop?order=success')
-    }
+    if (confirmErr) { setError(confirmErr.message); setLoading(false) }
+    else { clearCart(); navigate('/shop?order=success') }
   }
 
   return (
     <form onSubmit={handleSubmit} className="co-form">
 
-      {/* Contact */}
+      {/* ── Contact ── */}
       <section className="co-section">
         <p className="co-label">Contact</p>
         <div className="co-field-grid">
           <div className="co-field co-field--full">
-            <label>Email</label>
-            <input type="email" placeholder="you@example.com" required
-              value={email} onChange={e => setEmail(e.target.value)} />
+            <label>Email *</label>
+            <input
+              type="text"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); if (emailErr) setEmailErr('') }}
+              onBlur={() => { if (email && !isValidEmail(email)) setEmailErr('Enter a valid email address') }}
+              className={emailErr ? 'co-input--error' : ''}
+            />
+            {emailErr && <span className="co-field-error">{emailErr}</span>}
           </div>
           <div className="co-field co-field--full">
-            <label>Phone</label>
-            <input type="tel" placeholder="+1 (555) 000-0000"
-              value={phone} onChange={e => setPhone(e.target.value)} />
+            <label>Phone (US) *</label>
+            <input
+              type="tel"
+              placeholder="(555) 000-0000"
+              value={phone}
+              onChange={handlePhoneChange}
+              onBlur={() => { if (phone && !isValidPhone(phone)) setPhoneErr('Enter a valid 10-digit US phone number') }}
+              className={phoneErr ? 'co-input--error' : ''}
+            />
+            {phoneErr && <span className="co-field-error">{phoneErr}</span>}
           </div>
         </div>
       </section>
 
-      {/* Shipping */}
+      {/* ── Shipping ── */}
       <section className="co-section">
         <p className="co-label">Shipping address</p>
-        <div className="co-field-grid">
+        <div className="co-field-grid" style={{ marginBottom: '0.85rem' }}>
           <div className="co-field co-field--full">
-            <label>Full name</label>
-            <input type="text" placeholder="Jane Smith" required
-              value={name} onChange={e => setName(e.target.value)} />
-          </div>
-          <div className="co-field co-field--full">
-            <label>Address</label>
-            <input type="text" placeholder="123 Main St" required
-              value={address} onChange={e => setAddress(e.target.value)} />
-          </div>
-          <div className="co-field">
-            <label>City</label>
-            <input type="text" placeholder="New York" required
-              value={city} onChange={e => setCity(e.target.value)} />
-          </div>
-          <div className="co-field">
-            <label>State / Province</label>
-            <input type="text" placeholder="NY"
-              value={state} onChange={e => setState(e.target.value)} />
-          </div>
-          <div className="co-field">
-            <label>ZIP / Postal code</label>
-            <input type="text" placeholder="10001" required
-              value={zip} onChange={e => setZip(e.target.value)} />
-          </div>
-          <div className="co-field">
-            <label>Country</label>
-            <select value={country} onChange={e => setCountry(e.target.value)}>
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="GB">United Kingdom</option>
-              <option value="AU">Australia</option>
-              <option value="DE">Germany</option>
-              <option value="FR">France</option>
-              <option value="AL">Albania</option>
-            </select>
+            <label>Full name *</label>
+            <input type="text" placeholder="Jane Smith" required value={shipName} onChange={(e) => setShipName(e.target.value)} />
           </div>
         </div>
+        <AddressFields data={shipAddr} onChange={setShipAddr} />
       </section>
 
-      {/* Payment */}
+      {/* ── Billing ── */}
       <section className="co-section">
-        <p className="co-label">Payment</p>
+        <p className="co-label">Billing address</p>
+        <label className="co-checkbox">
+          <input type="checkbox" checked={billSame} onChange={(e) => setBillSame(e.target.checked)} />
+          <span>Same as shipping address</span>
+        </label>
+        {!billSame && (
+          <div style={{ marginTop: '1.25rem' }}>
+            <div className="co-field-grid" style={{ marginBottom: '0.85rem' }}>
+              <div className="co-field co-field--full">
+                <label>Full name *</label>
+                <input type="text" placeholder="Jane Smith" required value={billName} onChange={(e) => setBillName(e.target.value)} />
+              </div>
+            </div>
+            <AddressFields data={billAddr} onChange={setBillAddr} />
+          </div>
+        )}
+      </section>
+
+      {/* ── Payment ── */}
+      <section className="co-section">
+        <p className="co-label">Card details</p>
         <div className="co-field-grid">
           <div className="co-field co-field--full">
-            <label>Card number</label>
-            <div className="co-card-wrap">
-              <CardNumberElement options={CARD_STYLE} />
-            </div>
+            <label>Name on card *</label>
+            <input type="text" placeholder="Jane Smith" required value={cardName} onChange={(e) => setCardName(e.target.value)} />
+          </div>
+          <div className="co-field co-field--full">
+            <label>Card number *</label>
+            <div className="co-card-wrap"><CardNumberElement options={CARD_STYLE} /></div>
           </div>
           <div className="co-field">
-            <label>Expiry</label>
-            <div className="co-card-wrap">
-              <CardExpiryElement options={CARD_STYLE} />
-            </div>
+            <label>Expiry date *</label>
+            <div className="co-card-wrap"><CardExpiryElement options={CARD_STYLE} /></div>
           </div>
           <div className="co-field">
-            <label>CVC</label>
-            <div className="co-card-wrap">
-              <CardCvcElement options={CARD_STYLE} />
-            </div>
+            <label>CVC *</label>
+            <div className="co-card-wrap"><CardCvcElement options={CARD_STYLE} /></div>
           </div>
         </div>
       </section>
@@ -181,11 +315,10 @@ function PaymentForm({ totalPrice, clientSecret }) {
       <button type="submit" className="btn co-pay-btn" disabled={!stripe || loading}>
         {loading ? 'Processing…' : `Pay $${totalPrice}`}
       </button>
-
       <p className="co-secure">
-        <svg width="11" height="13" viewBox="0 0 11 13" fill="none" style={{ marginRight: '6px', verticalAlign: 'middle' }}>
-          <rect x="1" y="5" width="9" height="7" rx="1" stroke="currentColor" strokeWidth="1.2" />
-          <path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" strokeWidth="1.2" />
+        <svg width="11" height="13" viewBox="0 0 11 13" fill="none" style={{ marginRight: 6, verticalAlign: 'middle' }}>
+          <rect x="1" y="5" width="9" height="7" rx="1" stroke="currentColor" strokeWidth="1.2"/>
+          <path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" strokeWidth="1.2"/>
         </svg>
         Secured by Stripe · SSL encrypted
       </p>
@@ -193,7 +326,7 @@ function PaymentForm({ totalPrice, clientSecret }) {
   )
 }
 
-/* ── Main page ───────────────────────────────────────────────── */
+/* ── Page ────────────────────────────────────────────────────── */
 export default function Checkout() {
   const { items, totalPrice, totalCount } = useCart()
   const [clientSecret, setClientSecret] = useState(null)
@@ -207,11 +340,8 @@ export default function Checkout() {
       body:    JSON.stringify({ items }),
     })
       .then(r => r.json())
-      .then(d => {
-        if (d.clientSecret) setClientSecret(d.clientSecret)
-        else setFetchError(d.error || 'Could not initialise payment.')
-      })
-      .catch(() => setFetchError('Could not connect to payment service.'))
+      .then(d => { if (d.clientSecret) setClientSecret(d.clientSecret); else setFetchError(d.error || 'Could not initialise payment.') })
+      .catch(() => setFetchError('Could not connect to payment service. Make sure STRIPE_SECRET_KEY is set in Vercel.'))
   }, [])
 
   if (items.length === 0) {
@@ -226,24 +356,12 @@ export default function Checkout() {
   return (
     <div className="co-page">
       <Link to="/shop" className="co-back">← Back to Shop</Link>
-
       <div className="co-grid">
 
-        {/* ── LEFT: form ── */}
         <div className="co-left">
           <h1 className="co-heading">Checkout</h1>
-
-          {fetchError && (
-            <div className="co-fetch-error">
-              <strong>Payment unavailable</strong>
-              <p>{fetchError}</p>
-            </div>
-          )}
-
-          {!clientSecret && !fetchError && (
-            <div className="co-loading"><span /><span /><span /></div>
-          )}
-
+          {fetchError && <div className="co-fetch-error"><strong>Payment unavailable</strong><p>{fetchError}</p></div>}
+          {!clientSecret && !fetchError && <div className="co-loading"><span /><span /><span /></div>}
           {clientSecret && (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
               <PaymentForm totalPrice={totalPrice} clientSecret={clientSecret} />
@@ -251,10 +369,8 @@ export default function Checkout() {
           )}
         </div>
 
-        {/* ── RIGHT: order summary ── */}
         <aside className="co-summary">
           <p className="co-label">Order summary · {totalCount} {totalCount === 1 ? 'item' : 'items'}</p>
-
           <ul className="co-items">
             {items.map((item, idx) => (
               <li key={idx} className="co-item">
@@ -266,9 +382,7 @@ export default function Checkout() {
                   <span className="co-item__title">{item.title}</span>
                   <span className="co-item__spec">{item.size} · {item.material}</span>
                   {item.frame !== 'No Frame' && (
-                    <span className="co-item__spec">
-                      {item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}
-                    </span>
+                    <span className="co-item__spec">{item.frame}{item.mat !== 'No Mat' ? ` · ${item.mat} mat` : ''}</span>
                   )}
                   <span className="co-item__spec">Qty {item.qty}</span>
                 </div>
@@ -276,17 +390,10 @@ export default function Checkout() {
               </li>
             ))}
           </ul>
-
           <div className="co-totals">
-            <div className="co-totals__row">
-              <span>Subtotal</span><span>${totalPrice}</span>
-            </div>
-            <div className="co-totals__row">
-              <span>Shipping</span><span>Free</span>
-            </div>
-            <div className="co-totals__row co-totals__row--total">
-              <span>Total</span><span>${totalPrice}</span>
-            </div>
+            <div className="co-totals__row"><span>Subtotal</span><span>${totalPrice}</span></div>
+            <div className="co-totals__row"><span>Shipping</span><span>Free</span></div>
+            <div className="co-totals__row co-totals__row--total"><span>Total</span><span>${totalPrice}</span></div>
           </div>
         </aside>
 
