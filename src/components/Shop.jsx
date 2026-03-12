@@ -235,6 +235,13 @@ function OrderModal({ product, onClose, onAddToCart }) {
               </div>
             </div>
 
+            {/* Add Frame button — appears right after material, basic mode only */}
+            {mode === 'basic' && (
+              <button className="cm-frame-btn" onClick={enterCustomize}>
+                Add Frame &amp; Customize →
+              </button>
+            )}
+
             {/* Frame + Mat (customize mode only) */}
             {mode === 'customize' && (
               <>
@@ -298,11 +305,6 @@ function OrderModal({ product, onClose, onAddToCart }) {
               }}>
                 {t('shop.addToCart')}
               </button>
-              {mode === 'basic' && (
-                <button className="cm-frame-btn" onClick={enterCustomize}>
-                  Add Frame &amp; Customize →
-                </button>
-              )}
               {mode === 'customize' && (
                 <p className="cm-note">{t('shop.note')}</p>
               )}
