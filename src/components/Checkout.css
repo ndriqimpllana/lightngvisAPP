@@ -48,9 +48,87 @@
   max-width: none;
 }
 
-/* Payment element container */
-.co-payment-wrap {
-  margin-bottom: 1.75rem;
+/* ── Form sections ───────────────────────────────────────────── */
+.co-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.co-section {
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+.co-section:last-of-type {
+  border-bottom: none;
+}
+
+/* ── Field grid ──────────────────────────────────────────────── */
+.co-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.co-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.co-field--full {
+  grid-column: 1 / -1;
+}
+
+.co-field label {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  font-family: var(--font-sans);
+}
+
+.co-field input,
+.co-field select {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  color: var(--black);
+  outline: none;
+  transition: border-color var(--transition);
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.co-field input:focus,
+.co-field select:focus {
+  border-color: var(--black);
+}
+
+.co-field input::placeholder {
+  color: var(--gray-400);
+}
+
+/* Stripe card element wrapper — must have explicit height */
+.co-card-wrap {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  transition: border-color var(--transition);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.co-card-wrap:focus-within {
+  border-color: var(--black);
+}
+.co-card-wrap > * {
+  width: 100%;
 }
 
 .co-pay-btn {
