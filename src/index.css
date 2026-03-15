@@ -33,6 +33,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
 }
 
 /* Numbers use Playfair Display — applied per element in component CSS */
@@ -60,7 +62,7 @@ button {
 
 /* ── Typography ── */
 h1, h2, h3, h4 {
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
