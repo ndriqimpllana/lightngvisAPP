@@ -1,4 +1,11 @@
-import { Routes, Route, useSearchParams } from 'react-router-dom'
+import {
+  createRouter,
+  createRoute,
+  createRootRoute,
+  Outlet,
+  useSearch,
+  useNavigate,
+} from '@tanstack/react-router'
 import { useEffect } from 'react'
 import './App.css'
 import { CartProvider } from './context/CartContext'
@@ -13,20 +20,43 @@ import CartDrawer from './components/CartDrawer'
 import Checkout from './components/Checkout'
 import { Toaster } from 'sonner'
 
-function ShopWithSuccess() {
-  const [params, setParams] = useSearchParams()
+// Shared layout — wraps every page
+function RootLayout() {
+  return (
+    <CartProvider>
+      <Navbar />
+      <CartDrawer />
+      <Toaster richColors position="bottom-right" duration={1000} />
+      <Outlet />
+      <Footer />
+    </CartProvider>
+  )
+}
+
+// Home page — adds scroll-snap class while mounted
+function HomePage() {
+  useEffect(() => {
+    document.documentElement.classList.add('snap-home')
+    return () => document.documentElement.classList.remove('snap-home')
+  }, [])
+  return <><Hero /><Gallery /><About /></>
+}
+
+// Shop page — reads validated search params from the route
+function ShopPage() {
+  const { order } = useSearch({ from: '/shop' })
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (params.get('order') === 'success') {
-      // clear the query param after a moment
-      const t = setTimeout(() => setParams({}, { replace: true }), 5000)
+    if (order === 'success') {
+      const t = setTimeout(() => navigate({ to: '/shop', search: {}, replace: true }), 5000)
       return () => clearTimeout(t)
     }
-  }, [params, setParams])
+  }, [order, navigate])
 
   return (
     <>
-      {params.get('order') === 'success' && (
+      {order === 'success' && (
         <div className="order-success-banner">
           Order placed — thank you! You'll receive a confirmation email shortly.
         </div>
@@ -36,29 +66,38 @@ function ShopWithSuccess() {
   )
 }
 
-function HomePage() {
-  useEffect(() => {
-    document.documentElement.classList.add('snap-home')
-    return () => document.documentElement.classList.remove('snap-home')
-  }, [])
-  return <><Hero /><Gallery /><About /></>
-}
+// ── Route tree ──────────────────────────────────────────────
+const rootRoute = createRootRoute({ component: RootLayout })
 
-function App() {
-  return (
-    <CartProvider>
-      <Navbar />
-      <CartDrawer />
-      <Toaster richColors position="bottom-right" duration={1000} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopWithSuccess />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/checkout" element={<Checkout />} />
-      </Routes>
-      <Footer />
-    </CartProvider>
-  )
-}
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: HomePage,
+})
 
-export default App
+const shopRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/shop',
+  component: ShopPage,
+  // Declare search params so useSearch() knows what to expect
+  validateSearch: (search) => ({
+    order: typeof search.order === 'string' ? search.order : undefined,
+    highlight: typeof search.highlight === 'string' ? search.highlight : undefined,
+  }),
+})
+
+const contactRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/contact',
+  component: Contact,
+})
+
+const checkoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/checkout',
+  component: Checkout,
+})
+
+const routeTree = rootRoute.addChildren([indexRoute, shopRoute, contactRoute, checkoutRoute])
+
+export const router = createRouter({ routeTree })

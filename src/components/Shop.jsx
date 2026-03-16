@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams } from 'react-router-dom'
+import { useSearch } from '@tanstack/react-router'
 import { useCart } from '../context/CartContext'
 import './Shop.css'
 
@@ -356,11 +356,10 @@ function Shop() {
   const { t } = useTranslation()
   const { addItem } = useCart()
   const [selected, setSelected] = useState(null)
-  const [searchParams] = useSearchParams()
+  const { highlight } = useSearch({ strict: false })
   const highlightRef = useRef(null)
 
   useEffect(() => {
-    const highlight = searchParams.get('highlight')
     if (!highlight) return
     const id = `product-${highlight.toLowerCase().replace(/\s+/g, '-')}`
     const el = document.getElementById(id)
@@ -368,7 +367,7 @@ function Shop() {
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     el.classList.add('sc-card--highlight')
     highlightRef.current = setTimeout(() => el.classList.remove('sc-card--highlight'), 1800)
-  }, [searchParams])
+  }, [highlight])
 
   useEffect(() => () => clearTimeout(highlightRef.current), [])
 

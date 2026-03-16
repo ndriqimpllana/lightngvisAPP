@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { useCart } from '../context/CartContext'
 import './CartDrawer.css'
 
@@ -23,7 +23,7 @@ export default function CartDrawer() {
 
   const handleCheckout = () => {
     setIsOpen(false)
-    navigate('/checkout')
+    navigate({ to: '/checkout' })
   }
 
   return (

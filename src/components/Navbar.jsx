@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useCart } from '../context/CartContext'
 import './Navbar.css'
@@ -25,8 +25,8 @@ function Navbar() {
 
   const handleSectionLink = (sectionId) => {
     setMenuOpen(false)
-    if (window.location.pathname !== '/') {
-      navigate('/')
+    if (pathname !== '/') {
+      navigate({ to: '/' })
       setTimeout(() => {
         const el = document.getElementById(sectionId)
         if (el) el.scrollIntoView({ behavior: 'instant' })
@@ -38,7 +38,7 @@ function Navbar() {
   }
 
   const { totalCount, setIsOpen: openCart } = useCart()
-  const { pathname } = useLocation()
+  const { location: { pathname } } = useRouterState()
   const isHome = pathname === '/'
   const isDark = !isHome || pastHero
 

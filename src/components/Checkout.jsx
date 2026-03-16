@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link } from '@tanstack/react-router'
 import { loadStripe } from '@stripe/stripe-js'
 import {
   Elements,
@@ -238,7 +238,7 @@ function PaymentForm({ totalPrice, clientSecret }) {
       }).catch(err => console.error('Prodigi order failed:', err))
 
       clearCart()
-      navigate('/shop?order=success')
+      navigate({ to: '/shop', search: { order: 'success' } })
     }
   }
 
@@ -432,7 +432,7 @@ export default function Checkout() {
                 <img src={item.src} alt={item.title} className="co-item__img" />
                 <div className="co-item__details">
                   <div className="co-item__top-row">
-                    <Link to={`/shop?highlight=${encodeURIComponent(item.title)}`} className="co-item__title">{item.title}</Link>
+                    <Link to="/shop" search={{ highlight: item.title }} className="co-item__title">{item.title}</Link>
                     <button className="co-item__remove" onClick={() => removeItem(idx)} aria-label="Remove item">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
