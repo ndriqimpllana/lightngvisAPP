@@ -152,7 +152,7 @@ const emptyAddr = { address: '', city: '', state: '', zip: '', country: 'US' }
 function PaymentForm({ totalPrice, clientSecret }) {
   const stripe   = useStripe()
   const elements = useElements()
-  const { clearCart } = useCart()
+  const { clearCart, items } = useCart()
   const navigate = useNavigate()
 
   const [loading,  setLoading ] = useState(false)
@@ -218,7 +218,28 @@ function PaymentForm({ totalPrice, clientSecret }) {
     })
 
     if (confirmErr) { setError(confirmErr.message); setLoading(false) }
-    else { clearCart(); navigate('/shop?order=success') }
+    else {
+      // Fire Prodigi print order — don't block the success flow if it fails
+      fetch('/api/create-prodigi-order', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          email,
+          shipping: {
+            name:    shipName,
+            address: shipAddr.address,
+            city:    shipAddr.city,
+            state:   shipAddr.state,
+            zip:     shipAddr.zip,
+            country: shipAddr.country,
+          },
+        }),
+      }).catch(err => console.error('Prodigi order failed:', err))
+
+      clearCart()
+      navigate('/shop?order=success')
+    }
   }
 
   return (
