@@ -25,21 +25,56 @@ function Hero() {
   const { t } = useTranslation()
   const [current, setCurrent] = useState(0)
   const [scrollY, setScrollY] = useState(0)
+  const [vh, setVh] = useState(() => window.innerHeight || 1)
+  const [isSlowConnection, setIsSlowConnection] = useState(false)
+  const [loadedIndices, setLoadedIndices] = useState(() => new Set([0]))
 
   useEffect(() => {
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+    const updateConnectionMode = () => {
+      const slowTypes = ['slow-2g', '2g', '3g']
+      const shouldReduceData = Boolean(conn?.saveData) || slowTypes.includes(conn?.effectiveType)
+      setIsSlowConnection(shouldReduceData)
+    }
+
+    updateConnectionMode()
+    conn?.addEventListener?.('change', updateConnectionMode)
+    return () => conn?.removeEventListener?.('change', updateConnectionMode)
+  }, [])
+
+  useEffect(() => {
+    if (isSlowConnection) return undefined
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % heroImages.length)
     }, 4000)
     return () => clearInterval(timer)
-  }, [])
+  }, [isSlowConnection])
+
+  useEffect(() => {
+    if (isSlowConnection) return
+    const queue = [current, (current + 1) % heroImages.length]
+    queue.forEach((index) => {
+      setLoadedIndices((prev) => {
+        if (prev.has(index)) return prev
+        const next = new Set(prev)
+        next.add(index)
+        return next
+      })
+      const img = new Image()
+      img.src = heroImages[index]
+    })
+  }, [current, isSlowConnection])
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY)
+    const onResize = () => setVh(window.innerHeight || 1)
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+    }
   }, [])
-
-  const vh = window.innerHeight
 
   // Content fades out in the first 40% of the hero height
   const contentOpacity = Math.max(0, 1 - scrollY / (vh * 0.4))
@@ -50,6 +85,7 @@ function Hero() {
 
   // Scroll indicator fades between 20%–60% of hero
   const scrollIndicatorOpacity = Math.max(0, 1 - (scrollY - vh * 0.1) / (vh * 0.35))
+  const activeIndex = isSlowConnection ? 0 : current
 
   return (
     <section id="hero" className="hero">
@@ -58,8 +94,12 @@ function Hero() {
         {heroImages.map((src, i) => (
           <div
             key={i}
-            className={`hero__slide ${i === current ? 'hero__slide--active' : ''}`}
-            style={src ? { backgroundImage: `url(${src})` } : undefined}
+            className={`hero__slide ${i === activeIndex ? 'hero__slide--active' : ''}`}
+            style={
+              isSlowConnection
+                ? (i === 0 ? { backgroundImage: `url(${heroImages[0]})` } : undefined)
+                : (loadedIndices.has(i) ? { backgroundImage: `url(${src})` } : undefined)
+            }
           />
         ))}
       </div>

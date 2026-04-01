@@ -72,6 +72,8 @@ function Gallery() {
               src={item.src}
               alt={item.title}
               loading="lazy"
+              decoding="async"
+              fetchPriority={index === 0 ? 'high' : 'low'}
             />
             <div className="gallery__overlay">
               <h3>{item.title}</h3>
@@ -95,6 +97,7 @@ function Gallery() {
               className="lightbox__img"
               src={current.src}
               alt={current.title}
+              decoding="async"
             />
             <div className="lightbox__info">
               <h3>{current.title}</h3>
