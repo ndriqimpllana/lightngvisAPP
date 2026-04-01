@@ -1,11 +1,1 @@
 /* App-level styles are handled in component CSS files */
-
-.order-success-banner {
-  background: var(--black);
-  color: var(--white);
-  text-align: center;
-  padding: 1rem 2rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  font-family: var(--font-sans);
-}
