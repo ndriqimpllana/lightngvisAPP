@@ -4,14 +4,10 @@ import './Navbar.css'
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [pastHero, setPastHero] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 50)
-      setPastHero(window.scrollY >= window.innerHeight * 0.85)
-    }
+    const onScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -33,14 +29,16 @@ function Navbar() {
       }
     }
   }
+
   const isHome = pathname === '/'
-  const isDark = !isHome || pastHero
+  const needsSolidBg = scrolled || !isHome
+  const showBlend = isHome && !scrolled
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${isDark ? 'navbar--dark' : ''}`}>
+    <nav className={`navbar ${needsSolidBg ? 'navbar--scrolled' : ''} ${showBlend ? 'navbar--blend' : ''}`}>
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo">
-          LIGHTNGVIS
+          Ndriçim Pllana
         </Link>
 
         <div className="navbar__right">
@@ -55,7 +53,7 @@ function Navbar() {
           </button>
 
           <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
-            <li><button className="navbar__section-link" onClick={() => handleSectionLink('work')}>Work</button></li>
+            <li><button className="navbar__section-link" onClick={() => handleSectionLink('work')}>Index</button></li>
             <li><button className="navbar__section-link" onClick={() => handleSectionLink('about')}>About</button></li>
             <li><Link to="/contact" onClick={handleNavClick}>Contact</Link></li>
           </ul>

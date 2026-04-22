@@ -5,20 +5,30 @@
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 1.5rem 2rem;
-  transition: background-color var(--transition), padding var(--transition), box-shadow var(--transition);
+  padding: 18px 32px;
+  transition: background-color var(--transition), padding var(--transition), border-color var(--transition);
 }
 
 .navbar--scrolled {
   background-color: var(--bg);
-  padding: 1rem 2rem;
-  box-shadow: 0 1px 0 var(--line);
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--line);
 }
 
-.navbar--dark {
-  background-color: #000000;
-  color: #ffffff;
-  box-shadow: none;
+/* Over the hero — text inverts to read over any photo */
+.navbar--blend .navbar__logo,
+.navbar--blend .navbar__links a,
+.navbar--blend .navbar__section-link {
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.navbar--blend .navbar__toggle span {
+  mix-blend-mode: difference;
+  background-color: #fff;
+}
+.navbar--blend .navbar__links a::after,
+.navbar--blend .navbar__section-link::after {
+  background-color: #fff;
 }
 
 .navbar__inner {
@@ -30,12 +40,12 @@
 }
 
 .navbar__logo {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-serif);
+  font-size: 15px;
   font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--mute);
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--ink);
 }
 
 .navbar__links {

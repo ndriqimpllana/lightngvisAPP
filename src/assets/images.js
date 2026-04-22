@@ -31,7 +31,7 @@ export default images
 
 // TODO: confirm titles and locations with Ndriçim
 export const photos = [
-  { id: 1,  src: img1,  srcFull: img1Full,  title: 'Crossing at Loew\'s',  titleItalic: 'Loew\'s', shortTitle: 'Loew\'s',   location: 'New York', year: 2024, span: 's-portrait-hero' },
+  { id: 1,  src: img1,  srcFull: img1Full,  title: 'Crossing at Loew\'s, 42nd Street',  titleItalic: 'Loew\'s', shortTitle: 'Loew\'s',   location: 'New York', year: 2024, span: 's-portrait-hero' },
   { id: 2,  src: img2,  srcFull: img2Full,  title: 'Placeholder II',        shortTitle: 'II',        location: 'New York', year: 2024, span: 's-portrait' },
   { id: 3,  src: img3,  srcFull: img3Full,  title: 'Placeholder III',       shortTitle: 'III',       location: 'New York', year: 2024, span: 's-landscape' },
   { id: 4,  src: img4,  srcFull: img4Full,  title: 'Placeholder IV',        shortTitle: 'IV',        location: 'New York', year: 2024, span: 's-landscape-wide' },
