@@ -1,9 +1,5 @@
 .navbar {
-  --white: #ffffff;
-  --black: #000000;
-  --gray-200: #e5e5e5;
-  --gray-100: #f5f5f5;
-  color: #000000;
+  color: var(--ink);
   position: fixed;
   top: 0;
   left: 0;
@@ -14,9 +10,9 @@
 }
 
 .navbar--scrolled {
-  background-color: var(--white);
+  background-color: var(--bg);
   padding: 1rem 2rem;
-  box-shadow: 0 1px 0 var(--gray-200);
+  box-shadow: 0 1px 0 var(--line);
 }
 
 .navbar--dark {
@@ -34,25 +30,47 @@
 }
 
 .navbar__logo {
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: var(--mute);
 }
 
 .navbar__links {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+  z-index: 90;
   display: flex;
-  gap: 2.5rem;
+}
+
+.navbar__links--open {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .navbar__links a,
 .navbar__section-link {
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: var(--mute);
   position: relative;
   padding-bottom: 2px;
-  font-weight: 700;
 }
 
 .navbar__section-link {
@@ -72,7 +90,7 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-color: var(--black);
+  background-color: var(--ink);
   transition: width var(--transition);
 }
 
@@ -98,12 +116,12 @@
   align-items: center;
   gap: 0.4rem;
   background: none;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--black);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--mute);
   padding: 0.35rem 0;
-  font-family: inherit;
 }
 
 .lang-dropdown__arrow {
@@ -118,8 +136,8 @@
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-  background-color: var(--white);
-  border: 1px solid var(--gray-200);
+  background-color: var(--bg);
+  border: 1px solid var(--line);
   min-width: 140px;
   padding: 0.35rem 0;
   list-style: none;
@@ -133,21 +151,21 @@
   width: 100%;
   padding: 0.6rem 1rem;
   background: none;
-  font-size: 0.75rem;
-  color: var(--gray-600);
-  font-family: inherit;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mute);
   text-align: left;
   transition: background-color var(--transition), color var(--transition);
 }
 
 .lang-dropdown__item:hover {
-  background-color: var(--gray-100);
-  color: var(--black);
+  background-color: var(--line);
+  color: var(--ink);
 }
 
 .lang-dropdown__item--active {
-  color: var(--black);
-  font-weight: 600;
+  color: var(--ink);
+  font-weight: 500;
 }
 
 .lang-dropdown__short {
@@ -167,7 +185,7 @@
 
 /* ── Hamburger ── */
 .navbar__toggle {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 5px;
   background: none;
@@ -178,7 +196,7 @@
   display: block;
   width: 22px;
   height: 1.5px;
-  background-color: var(--black);
+  background-color: var(--ink);
   transition: transform var(--transition), opacity var(--transition);
 }
 
@@ -194,37 +212,21 @@
   transform: translateY(-6.5px) rotate(-45deg);
 }
 
-/* ── Mobile ── */
-@media (max-width: 768px) {
+/* ── Desktop ── */
+@media (min-width: 769px) {
   .navbar__toggle {
-    display: flex;
+    display: none;
   }
 
   .navbar__links {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--white);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--transition);
-    z-index: 90;
-  }
-
-  .navbar__links--open {
+    position: static;
+    inset: auto;
+    flex-direction: row;
+    gap: 2.5rem;
     opacity: 1;
-    pointer-events: all;
-  }
-
-  .navbar__links a,
-  .navbar__section-link {
-    font-size: 1rem;
+    pointer-events: auto;
+    background: transparent;
+    z-index: auto;
   }
 
   .lang-dropdown {

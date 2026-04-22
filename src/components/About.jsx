@@ -1,27 +1,26 @@
-import { useTranslation } from 'react-i18next'
+import heroImg from '../assets/img/ANDY4354.jpg'
 import './About.css'
 
 function About() {
-  const { t } = useTranslation()
-
   return (
     <section id="about" className="about section">
       <div className="about__inner">
         <div className="about__image">
-          <div className="about__placeholder" />
+          <img src={heroImg} alt="" aria-hidden="true" />
         </div>
         <div className="about__text">
-          <h2>{t('about.heading')}</h2>
-          <p>{t('about.bio1')}</p>
-          <p>{t('about.bio2')}</p>
+          <h2>About, <em>briefly</em></h2>
+          {/* TODO: confirm with Ndriçim */}
+          <p>Street photography from New York, 2022 onward. I shoot on a Canon R6 with a 35mm prime — one lens, one focal length, because it forces me to move.</p>
+          <p>Available for editorial, commissions, and print sales.</p>
           <div className="about__details">
             <div>
-              <span className="about__label">{t('about.basedIn')}</span>
-              <span className="about__value">{t('about.basedInValue')}</span>
+              <span className="about__label">Based in</span>
+              <span className="about__value">New York City</span>
             </div>
             <div>
-              <span className="about__label">{t('about.availableFor')}</span>
-              <span className="about__value">{t('about.availableForValue')}</span>
+              <span className="about__label">Available for</span>
+              <span className="about__value">Freelance & Commissions</span>
             </div>
           </div>
         </div>

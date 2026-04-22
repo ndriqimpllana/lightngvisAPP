@@ -8,17 +8,20 @@
 }
 
 :root {
-  --white: #000000;
-  --black: #ffffff;
-  --gray-100: #1a1a1a;
-  --gray-200: #2a2a2a;
-  --gray-400: #737373;
-  --gray-600: #a3a3a3;
-  --gray-800: #d4d4d4;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  --font-numbers: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  --transition: 0.3s ease;
+  --bg:        #F6F4EF;
+  --ink:       #15130F;
+  --ink-2:     #3a3631;
+  --mute:      #8a837a;
+  --line:      #d9d2c6;
+  --card:      #ffffff;
+  --accent:    #b34a2a;
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, monospace;
+
+  --transition:      200ms ease;
+  --transition-slow: 400ms ease;
 }
 
 html {
@@ -27,10 +30,10 @@ html {
 }
 
 body {
-  font-family: var(--font-display);
-  color: var(--black);
-  background-color: var(--white);
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background-color: var(--bg);
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -62,17 +65,18 @@ button {
 
 /* ── Typography ── */
 h1, h2, h3, h4 {
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
 }
-
-h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
-h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
-h3 { font-size: 1.125rem; }
+h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); }
+h3 { font-size: 1.25rem; }
+h1 em, h2 em { font-style: italic; font-weight: 300; color: var(--accent); }
 
 p {
-  color: var(--gray-600);
+  color: var(--ink-2);
   max-width: 600px;
 }
 
@@ -96,24 +100,23 @@ p {
 }
 
 .btn {
-  display: inline-block;
-  padding: 0.875rem 2.5rem;
-  background-color: var(--black);
-  color: var(--white);
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 32px;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 500;
-  border: none;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 0;
   cursor: pointer;
-  font-family: var(--font-sans);
-  transition: background-color var(--transition), transform var(--transition);
+  transition: background var(--transition), transform var(--transition);
 }
 
-.btn:hover {
-  background-color: var(--gray-800);
-  transform: translateY(-1px);
-}
+.btn:hover { background: var(--accent); transform: translateY(-1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar {
@@ -121,11 +124,11 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--white);
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-400);
+  background: var(--mute);
 }
 
 /* ── Snap scrolling — home page only ── */

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
 import './Navbar.css'
 
 function Navbar() {
-  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [pastHero, setPastHero] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -19,24 +17,22 @@ function Navbar() {
   }, [])
 
   const navigate = useNavigate()
+  const { location: { pathname } } = useRouterState()
 
   const handleNavClick = () => setMenuOpen(false)
 
   const handleSectionLink = (sectionId) => {
     setMenuOpen(false)
     if (pathname !== '/') {
-      navigate({ to: '/' })
-      setTimeout(() => {
-        const el = document.getElementById(sectionId)
-        if (el) el.scrollIntoView({ behavior: 'instant' })
-      }, 50)
+      navigate({ to: '/', hash: sectionId })
     } else {
       const el = document.getElementById(sectionId)
-      if (el) el.scrollIntoView({ behavior: 'smooth' })
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.scrollY
+        window.scrollTo({ top: y, behavior: 'smooth' })
+      }
     }
   }
-
-  const { location: { pathname } } = useRouterState()
   const isHome = pathname === '/'
   const isDark = !isHome || pastHero
 
@@ -59,9 +55,9 @@ function Navbar() {
           </button>
 
           <ul className={`navbar__links ${menuOpen ? 'navbar__links--open' : ''}`}>
-            <li><button className="navbar__section-link" onClick={() => handleSectionLink('work')}>{t('nav.work')}</button></li>
-            <li><button className="navbar__section-link" onClick={() => handleSectionLink('about')}>{t('nav.about')}</button></li>
-            <li><Link to="/contact" onClick={handleNavClick}>{t('nav.contact')}</Link></li>
+            <li><button className="navbar__section-link" onClick={() => handleSectionLink('work')}>Work</button></li>
+            <li><button className="navbar__section-link" onClick={() => handleSectionLink('about')}>About</button></li>
+            <li><Link to="/contact" onClick={handleNavClick}>Contact</Link></li>
           </ul>
         </div>
       </div>

@@ -1,16 +1,12 @@
 import { useState, useRef } from 'react'
 import emailjs from '@emailjs/browser'
-import { useTranslation } from 'react-i18next'
 import './Contact.css'
 
-// ── EmailJS config ─────────────────────────────────────────────
-// Replace these three values after setting up EmailJS (see README below)
-const EMAILJS_SERVICE_ID  = 'service_b313sjo'
-const EMAILJS_TEMPLATE_ID = 'template_ujsfasx'
-const EMAILJS_PUBLIC_KEY  = 'XXTvOyQVNT25dPKFI'
+const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const EMAILJS_PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 function Contact() {
-  const { t } = useTranslation()
   const formRef = useRef(null)
   const [status, setStatus] = useState('idle') // idle | sending | success | error
 
@@ -35,41 +31,41 @@ function Contact() {
   return (
     <section id="contact" className="contact section">
       <div className="section-header">
-        <h2>{t('contact.heading')}</h2>
-        <p>{t('contact.subheading')}</p>
+        <h2>Work together</h2>
+        <p>Commissions, prints, editorial. Fastest reply by email.</p>
       </div>
 
       <form ref={formRef} className="contact__form" onSubmit={handleSubmit}>
         <div className="contact__row">
           <div className="contact__field">
-            <label htmlFor="from_name">{t('contact.name')}</label>
+            <label htmlFor="from_name">Name</label>
             <input
               type="text"
               id="from_name"
               name="from_name"
-              placeholder={t('contact.namePlaceholder')}
+              placeholder="Your name"
               required
             />
           </div>
           <div className="contact__field">
-            <label htmlFor="reply_to">{t('contact.email')}</label>
+            <label htmlFor="reply_to">Email</label>
             <input
               type="email"
               id="reply_to"
               name="reply_to"
-              placeholder={t('contact.emailPlaceholder')}
+              placeholder="your@email.com"
               required
             />
           </div>
         </div>
 
         <div className="contact__field">
-          <label htmlFor="message">{t('contact.message')}</label>
+          <label htmlFor="message">Message</label>
           <textarea
             id="message"
             name="message"
             rows="6"
-            placeholder={t('contact.messagePlaceholder')}
+            placeholder="What do you need photographed, and when?"
             required
           />
         </div>
@@ -80,7 +76,7 @@ function Contact() {
             className="btn"
             disabled={status === 'sending'}
           >
-            {status === 'sending' ? 'Sending…' : t('contact.send')}
+            {status === 'sending' ? 'Sending…' : 'Send Message'}
           </button>
 
           {status === 'success' && (

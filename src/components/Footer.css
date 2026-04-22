@@ -1,6 +1,6 @@
 .footer {
   padding: 3rem 2rem;
-  border-top: 1px solid var(--gray-200);
+  border-top: 1px solid var(--line);
 }
 
 .footer__inner {
@@ -12,9 +12,11 @@
 }
 
 .footer__brand {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-transform: none;
 }
 
 .footer__links {
@@ -23,20 +25,37 @@
 }
 
 .footer__links a {
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gray-600);
+  color: var(--mute);
   transition: color var(--transition);
 }
 
 .footer__links a:hover {
-  color: var(--black);
+  color: var(--ink);
 }
 
 .footer__copy {
-  font-size: 0.7rem;
-  color: var(--gray-400);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.footer__colophon {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  text-align: center;
 }
 
 @media (max-width: 768px) {

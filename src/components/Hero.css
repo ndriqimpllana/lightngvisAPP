@@ -1,118 +1,80 @@
 .hero {
-  --white: #ffffff;
-  --black: #000000;
-  --gray-600: #525252;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   position: relative;
-  padding: 2rem;
   overflow: hidden;
+  background: #111;
 }
 
-/* ── Slideshow ── */
-.hero__slideshow {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
+.hero__slideshow { position: absolute; inset: 0; z-index: 0; }
 
 .hero__slide {
-  position: absolute;
-  inset: 0;
-  background-color: var(--gray-200);
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transform: scale(1);
-  transition: opacity 1.2s ease-in-out;
-  will-change: opacity, transform;
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.2s ease-in-out;
 }
 
-.hero__slide--active {
-  opacity: 1;
-  animation: kenBurns 4.5s ease-out forwards;
-}
+.hero__slide--active { opacity: 1; animation: kenBurns 6s ease-out forwards; }
 
 @keyframes kenBurns {
-  from { transform: scale(1.1); }
+  from { transform: scale(1.08); }
   to   { transform: scale(1); }
 }
 
-/* ── Overlay — opacity driven by JS scroll ── */
-.hero__overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background-color: rgba(255, 255, 255, 1);
-  /* transition removed — JS sets opacity directly for smoothness */
+.hero__wash {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 70%, rgba(0,0,0,.6) 100%);
 }
 
-/* ── Content ── */
-.hero__content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  will-change: opacity, transform;
+.hero__credit {
+  position: absolute; top: 92px; left: 32px; z-index: 2;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: #fff; opacity: 0.85;
 }
 
-.hero__tagline {
-  font-size: 1.2rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-600);
-  font-weight: 700;
+.hero__caption {
+  position: absolute; left: 32px; bottom: 40px; right: 240px; z-index: 2;
+  color: #fff;
 }
 
 .hero__title {
-  font-weight: 550;
-  line-height: 1;
-  letter-spacing: 0.12em;
-  color: var(--black);
-}
-
-.hero__subtitle {
-  font-size: 1.2rem;
-  color: var(--gray-600);
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  color: #fff;
+  margin: 0;
   text-transform: none;
 }
 
-/* ── Scroll indicator ── */
-.hero__scroll {
-  position: absolute;
-  bottom: 2.5rem;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  will-change: opacity;
+.hero__title em { font-style: italic; font-weight: 300; }
+
+.hero__counter {
+  position: absolute; right: 32px; bottom: 44px; z-index: 2;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.18em; color: #fff;
 }
 
-.hero__scroll span {
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--black);
-  font-weight: 700;
+.hero__dots {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%); z-index: 2;
+  display: flex; flex-direction: column; gap: 6px;
 }
 
-.hero__scroll-line {
-  width: 1px;
-  height: 40px;
-  background-color: var(--black);
-  animation: scrollPulse 2s ease-in-out infinite;
+.hero__dot {
+  width: 6px; height: 6px; padding: 0; border: 0;
+  background: #fff; opacity: 0.35; cursor: pointer;
+  transition: opacity var(--transition);
 }
 
-@keyframes scrollPulse {
-  0%, 100% { opacity: 1; transform: scaleY(1); }
-  50%       { opacity: 0.35; transform: scaleY(0.6); }
+.hero__dot--on { opacity: 1; }
+.hero__dot:hover { opacity: 0.9; }
+
+@media (max-width: 768px) {
+  .hero__credit { top: 76px; left: 20px; font-size: 10px; }
+  .hero__caption { left: 20px; right: 64px; bottom: 28px; }
+  .hero__title { font-size: clamp(24px, 7vw, 36px); }
+  .hero__counter { right: 20px; bottom: 32px; font-size: 10px; }
+  .hero__dots { right: 14px; }
 }

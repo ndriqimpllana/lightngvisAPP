@@ -1,5 +1,5 @@
 .contact {
-  background-color: var(--gray-100);
+  background: var(--bg);
 }
 
 .contact__form {
@@ -23,21 +23,23 @@
 }
 
 .contact__field label {
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gray-600);
+  color: var(--mute);
 }
 
 .contact__field input,
 .contact__field textarea {
   width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1px solid var(--gray-200);
-  background-color: var(--white);
-  font-family: inherit;
-  font-size: 0.9rem;
-  color: var(--black);
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink);
   transition: border-color var(--transition);
   outline: none;
   resize: vertical;
@@ -45,12 +47,13 @@
 
 .contact__field input:focus,
 .contact__field textarea:focus {
-  border-color: var(--black);
+  border-color: var(--accent);
 }
 
 .contact__field input::placeholder,
 .contact__field textarea::placeholder {
-  color: var(--gray-400);
+  color: var(--mute);
+  font-family: var(--font-sans);
 }
 
 .contact__footer {
