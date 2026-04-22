@@ -11,7 +11,11 @@ function About() {
         <div className="about__text">
           <h2>About, <em>briefly</em></h2>
           {/* TODO: confirm with Ndriçim */}
-          <p>Street photography from New York, 2022 onward. I shoot on a Canon R6 with a 35mm prime — one lens, one focal length, because it forces me to move.</p>
+          <p>Street photography from New York, fell in love with photography in 2018 and have not looked back since. I mostly shoot 
+            in Canon 5D Mark IV, the majority of my work had been shot in the Canon Mark IV excpect for my early years when i used to 
+            shoot with my first ever camera the Canon 5D Mark III and the fixed lens 100mm, f2.8. As of now i am making the switch to Fujifilm
+            with the new camera that i just purchased the X100V.
+          </p>
           <p>Available for editorial, commissions, and print sales.</p>
           <div className="about__details">
             <div>
